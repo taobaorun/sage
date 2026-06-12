@@ -1,0 +1,12 @@
+{
+  "name": "html-artifact",
+  "package": "@antskill/html-artifact",
+  "targets": [
+    { "tool": "claude-code", "path": ".claude/skills" }
+  ],
+  "files": {
+    "SKILL.md": "SKILL.md",
+    "references": "references/",
+    "assets": "assets/"
+  }
+}

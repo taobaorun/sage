@@ -1,0 +1,33 @@
+{
+  "name": "@antskill/html-artifact",
+  "version": "1.0.1",
+  "description": "把交付物做成单文件 HTML artifact 的专业技能——加载设计系统和高质量示例输出专业级可视化页面",
+  "scripts": {
+    "postinstall": "node install.js",
+    "preuninstall": "node uninstall.js",
+    "test": "echo 'ok'"
+  },
+  "files": [
+    "SKILL.md",
+    "install.js",
+    "uninstall.js",
+    "utils.js",
+    ".claude-skill.json",
+    "references/",
+    "assets/"
+  ],
+  "keywords": [
+    "claude-code",
+    "skill",
+    "ai-assistant",
+    "agent-skill"
+  ],
+  "author": "yuanxuan",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.antgroup-inc.cn"
+  }
+}

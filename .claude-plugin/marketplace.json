@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "sage-skills",
+  "description": "A curated collection of engineering skills — interactive teaching and HTML artifact generation.",
+  "plugins": [
+    {
+      "name": "sage-skills",
+      "description": "Engineering skills for interactive teaching (teacher) and professional HTML artifact generation (html-artifact).",
+      "license": "MIT",
+      "keywords": ["skills", "teaching", "html", "artifact", "engineering"]
+    }
+  ]
+}

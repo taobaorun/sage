@@ -1,0 +1,82 @@
+[
+  {
+    "query": "我刚执行完 ExecPlan，现在进入 Stage 4 收尾阶段，需要生成一份完成报告。项目是 harness-engineering 管理的，docs/exec-plans/active/ 下有个 refactor-auth.md 的执行计划",
+    "should_trigger": true
+  },
+  {
+    "query": "帮我创建 ExecPlan，任务是把支付模块从同步改成异步。需要同时生成 .md 和 .html 两份文档放到 docs/exec-plans/active/ 下",
+    "should_trigger": true
+  },
+  {
+    "query": "项目里有个重要设计决策要记录到 docs/design-docs/ 下面，关于缓存策略的选择，需要做一份 HTML 格式的设计文档",
+    "should_trigger": true
+  },
+  {
+    "query": "我在做 onboarding 屏的设计，想看看 3-4 个不同方向的方案，帮我做个并排对比的可视化页面",
+    "should_trigger": true
+  },
+  {
+    "query": "阶段三执行中发现了技术债务，需要记录到 tech-debt-tracker.md，同时在 design-docs 里写一份架构决策文档",
+    "should_trigger": true
+  },
+  {
+    "query": "帮我写一个产品功能规格文档，放到 docs/product-specs/ 下面，要 HTML 格式的",
+    "should_trigger": true
+  },
+  {
+    "query": "我刚完成一个 PR，帮我做一份 PR writeup 用 HTML 展示，重点讲 streaming 部分的改动",
+    "should_trigger": true
+  },
+  {
+    "query": "这周有好几个 incident，帮我整理一份故障复盘报告，要能分享给团队的",
+    "should_trigger": true
+  },
+  {
+    "query": "帮我写一份用户认证模块的 code review，代码在 src/auth/ 下",
+    "should_trigger": true
+  },
+  {
+    "query": "要做个 triage 看板，帮我排列一下这 20 个 Linear ticket 的优先级，能拖拽的那种",
+    "should_trigger": true
+  },
+  {
+    "query": "帮我把 AGENTS.md 更新一下，加了几个新模块的描述",
+    "should_trigger": false
+  },
+  {
+    "query": "在 docs/exec-plans/active/ 下创建一个新的 .md 执行计划文件，任务很简单就改一个配置项",
+    "should_trigger": false
+  },
+  {
+    "query": "帮我在 CODE_STYLE.md 里加一条关于错误处理的规范",
+    "should_trigger": false
+  },
+  {
+    "query": "帮我写一个 commit message，内容是修复了登录页面的一个 CSS 对齐问题",
+    "should_trigger": false
+  },
+  {
+    "query": "把这段日志里的错误行整理成列表发给我",
+    "should_trigger": false
+  },
+  {
+    "query": "给我的 README.md 加一个安装说明章节",
+    "should_trigger": false
+  },
+  {
+    "query": "帮我写个 shell 脚本来自动化部署流程",
+    "should_trigger": false
+  },
+  {
+    "query": "ExecPlan 里第三步的验证标准没通过，帮我更新 .md 文件把那个步骤标回 active",
+    "should_trigger": false
+  },
+  {
+    "query": "帮我在 Slack 频道里发一个简短的项目状态更新",
+    "should_trigger": false
+  },
+  {
+    "query": "写一个 Python 函数来解析 CSV 文件并过滤掉空行",
+    "should_trigger": false
+  }
+]

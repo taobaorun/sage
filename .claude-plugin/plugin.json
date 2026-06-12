@@ -1,0 +1,11 @@
+{
+  "name": "sage-skills",
+  "description": "A curated collection of engineering skills — interactive teaching and HTML artifact generation.",
+  "author": {
+    "name": "yuanxuan"
+  },
+  "license": "MIT",
+  "commands": "./.claude/commands",
+  "skills": "./skills",
+  "agents": []
+}
