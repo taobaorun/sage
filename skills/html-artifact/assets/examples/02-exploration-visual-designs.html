@@ -68,34 +68,14 @@
       font-weight: 500;
     }
 
-    .seg {
-      display: inline-flex;
+    .toolbar .field strong {
+      display: inline-block;
       border: 1.5px solid var(--gray-300);
       border-radius: 8px;
-      overflow: hidden;
-      background: var(--white);
-    }
-
-    .seg label {
       padding: 6px 14px;
-      cursor: pointer;
       font-size: 13px;
-      color: var(--gray-700);
-      user-select: none;
-    }
-
-    .seg label + label {
-      border-left: 1.5px solid var(--gray-300);
-    }
-
-    .seg input { display: none; }
-
-    .seg input:checked + span {
       color: var(--slate);
       font-weight: 600;
-    }
-
-    .seg label:has(input:checked) {
       background: var(--oat);
     }
 
@@ -191,13 +171,7 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
-      transition: background 0.15s, border-color 0.15s;
       overflow: hidden;
-    }
-
-    .stage.dark {
-      background: var(--slate);
-      border-color: var(--slate);
     }
 
     .rationale {
@@ -209,11 +183,10 @@
 
     /* =========================================================
        Empty-state variants — each scoped under .es-*
-       Theme tokens flip when .stage.dark is present.
+       Keep every artboard on the shared light-canvas tokens.
        ========================================================= */
 
     .stage        { --fg: var(--slate); --muted: var(--gray-500); --line: var(--gray-300); --panel: var(--white); }
-    .stage.dark   { --fg: #F0EEE6;      --muted: #9C9A93;         --line: #3D3D3A;         --panel: #1F1E1B;     }
 
     /* ---- A · Minimal ---- */
 
@@ -274,7 +247,6 @@
       border-radius: 8px;
       padding: 8px 16px;
     }
-    .stage.dark .es-b .btn { color: var(--slate); background: var(--oat); }
 
     /* ---- C · Playful ---- */
 
@@ -299,7 +271,6 @@
     .es-c .float .card:nth-child(1) { transform: rotate(-8deg) translate(-6px, 4px); opacity: 0.5; }
     .es-c .float .card:nth-child(2) { transform: rotate( 6deg) translate( 6px, 2px); opacity: 0.75; }
     .es-c .float .card:nth-child(3) { background: var(--oat); border-color: var(--oat); }
-    .stage.dark .es-c .float .card:nth-child(3) { background: var(--clay); border-color: var(--clay); }
     .es-c .shadow {
       width: 44px;
       height: 8px;
@@ -309,7 +280,6 @@
       filter: blur(2px);
       animation: shadow 3.2s ease-in-out infinite;
     }
-    .stage.dark .es-c .shadow { background: rgba(0,0,0,0.5); }
     .es-c h3 {
       font-family: var(--serif);
       font-weight: 500;
@@ -384,13 +354,7 @@
 
   <div class="toolbar">
     <div class="title">Acme · design exploration</div>
-    <div class="field">
-      <span>Background:</span>
-      <div class="seg" id="bg-seg">
-        <label><input type="radio" name="bg" value="light" checked><span>Light</span></label>
-        <label><input type="radio" name="bg" value="dark"><span>Dark</span></label>
-      </div>
-    </div>
+    <div class="field"><span>Canvas:</span><strong>Light</strong></div>
   </div>
 
   <div class="page">
@@ -401,8 +365,8 @@
       <div class="prompt-box">
         <span class="label">Prompt</span>
         Explore four visual directions for our empty-state component. Render each
-        live so we can compare tone, density, and how well they hold up on light
-        and dark surfaces.
+        live so we can compare tone, density, and how well they hold up on a
+        shared light canvas.
       </div>
     </header>
 
@@ -505,12 +469,5 @@
     </section>
   </div>
 
-  <script>
-    const stages = document.querySelectorAll('.stage');
-    document.getElementById('bg-seg').addEventListener('change', (e) => {
-      const dark = e.target.value === 'dark';
-      stages.forEach((s) => s.classList.toggle('dark', dark));
-    });
-  </script>
 </body>
 </html>
