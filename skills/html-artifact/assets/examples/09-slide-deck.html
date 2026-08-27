@@ -57,11 +57,6 @@
     max-width: 780px;
   }
 
-  .slide.invert {
-    background: var(--slate);
-    color: var(--ivory);
-  }
-
   /* ------------------------------------------------------------------
      Typography
      ------------------------------------------------------------------ */
@@ -73,8 +68,6 @@
     color: var(--gray-500);
     margin-bottom: 28px;
   }
-  .invert .eyebrow { color: var(--gray-300); }
-
   h1 {
     font-family: var(--serif);
     font-weight: 500;
@@ -268,13 +261,13 @@
   }
 
   /* ------------------------------------------------------------------
-     Slide 5 — decision (inverted)
+     Slide 5 — decision
      ------------------------------------------------------------------ */
   .decision-card {
     border: 1.5px solid var(--clay);
     border-radius: 14px;
     padding: 36px 38px;
-    background: rgba(217, 119, 87, 0.06);
+    background: #FBF1EC;
   }
 
   .decision-q {
@@ -287,7 +280,7 @@
   .decision-context {
     font-size: 14px;
     line-height: 1.6;
-    color: var(--gray-300);
+    color: var(--gray-700);
   }
 
   .options {
@@ -302,9 +295,9 @@
     font-size: 12px;
     padding: 10px 18px;
     border-radius: 999px;
-    border: 1px solid var(--gray-700);
-    color: var(--ivory);
-    background: transparent;
+    border: 1px solid var(--gray-300);
+    color: var(--slate);
+    background: #fff;
   }
   .chip.lean {
     border-color: var(--clay);
@@ -512,9 +505,9 @@
   </section>
 
   <!-- ============================================================
-       Slide 5 — Decision needed (inverted)
+       Slide 5 — Decision needed
        ============================================================ -->
-  <section class="slide invert" id="s5">
+  <section class="slide" id="s5">
     <div class="slide-inner">
       <div class="eyebrow">Decision needed</div>
       <h2>One call to make</h2>

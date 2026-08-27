@@ -67,7 +67,7 @@ allowed-tools: Read, Write, Bash
 :root {
   --ivory: #FAF9F5;       /* 主背景 */
   --paper: #FFFFFF;       /* 卡片背景 */
-  --slate: #141413;       /* 标题 */
+  --slate: #141413;       /* 标题 / 正文前景色，不用作大面积背景 */
   --clay: #D97757;        /* 主强调（橙） */
   --oat: #E3DACC;         /* 边框、柔和强调 */
   --olive: #788C5D;       /* 次强调（绿） */
@@ -90,12 +90,26 @@ allowed-tools: Read, Write, Bash
 
 如果项目本身有设计系统（用户提供 brand/design tokens），优先用项目的，但保持相同的"信息密度高、克制、serif 标题"的精神。
 
+#### 浅色画布约束
+
+这个 skill 的视觉基线是**浅色画布 + 深色文字**。页面要让人长时间阅读和分享，避免用强反差的黑色块抢走内容层级。
+
+- `body`、页面、slide、hero、section、卡片、面板、弹窗、看板列和摘要 callout 都使用 `--ivory`、`--paper`、`--gray-150`、`--oat` 或它们的浅色变体。
+- 不要生成 dark mode、反色页（inverted slide）、整屏深色 hero、大面积黑色卡片或深灰内容面板；不要把截图示例中的黑底版式复刻到新 artifact。
+- `--slate` 用于文字、图标、描边和小型控件的前景表达，不用作承载正文内容的背景色。
+- 需要强调重点时，用浅 `--oat` / `--gray-150` 底、`--clay` 左边框、留白和字号层级；不要靠黑底白字制造“重磅结论”。
+- 代码与 diff 允许在面积受控的局部区域使用高对比样式，但优先选择 `--paper` + 边框；它们不能成为页面或整张 slide 的主背景。
+- 输入素材本身是暗色 UI 时，把它作为浅色页面中的局部 mockup 展示，不要让暗色扩展到 artifact 画布。
+
+从示例复制结构后，检查是否带入 `.dark`、`.invert`、`background: #000`、`background: #141413` 或 `background: var(--slate)`。如果它们作用于内容容器，先改成浅色版本再继续。
+
 ### Step 3: 写内容
 - **单文件自包含**：CSS/JS 内联，图片 base64 或 https URL，**禁止**外链 CDN（用户离线也得能看）
 - **图优先于字**：能用 SVG 表达的关系，不要写一段散文描述
 - **可交互的部分必须配 export 按钮** —— "Copy as JSON" / "Copy as prompt" / "Copy as markdown"，让用户能把 UI 操作结果回灌给 Claude（这是 artifact 真正比 Markdown 强的地方）
 - **不要 ASCII 图**（`─┐│┘`），用 SVG
 - **不要 emoji 装饰**（除非用户要求），用配色 + 排版区分语义
+- **浅色面检查**：交付前确认页面里没有以黑色或深灰为背景的整页、整屏、hero、section、卡片、面板或摘要场景
 
 ### Step 4: 打开看效果
 生成后立刻用系统命令打开，让用户马上看到：
@@ -127,6 +141,7 @@ start "<absolute-path>/output.html"
 - ❌ **不要在最终交付里留 `<!-- TODO -->` 注释**。
 - ❌ **不要 ASCII 图**（用 SVG）；**不要 emoji 装饰**（用色块/字重/字号）。
 - ❌ **不要凭空发明色彩**：直接复用上面的 CSS 变量；要扩展时遵循同色调。
+- ❌ **不要用黑底白字制造重点场景**：禁止 dark mode、反色 slide、黑色 hero、深色大卡片和深色摘要 callout。改用浅底、clay 边框、排版层级与留白。
 
 ## Examples
 
@@ -164,6 +179,15 @@ start "<absolute-path>/output.html"
 **User**: "把这段日志的几个错误行整理一下"
 
 **Skill**: → 这是简单整理任务，**用文本/Markdown 直接答**。判断：用户会反复看或分享吗？这种一次性快查不需要 artifact。
+
+### Example 5: 重点结论页
+**User**: "做一页 release takeaway，把这次版本价值讲清楚"
+
+**Skill**:
+1. 用 `--ivory` 作为整页画布，重点内容放进 `--paper` 或浅 `--oat` 卡片
+2. 用 `--clay` 短线、左边框或编号建立视觉焦点，标题仍用 `--slate` 深色文字
+3. 通过字号、留白和两栏层级强化结论，不使用黑底白字的整屏或大卡片
+4. 在窄屏下保持浅色内容面自然堆叠
 
 ## 给 skill 使用者的提醒
 
