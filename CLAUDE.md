@@ -16,7 +16,9 @@ docs/         → Setup guides
 ## Skills
 
 - **teacher** — Interactive mastery-based teaching. Use when the user wants to deeply understand code, PRs, bug fixes, or technical topics.
-- **html-artifact** — Single-file HTML artifact generation with a professional design system. Use for specs, reports, diagrams, prototypes, and any deliverable meant for human consumption.
+- **html-artifact** — Single-file HTML artifact generation with a professional design system. Use for specs, reports, prototypes, and any deliverable meant for human consumption.
+- **marktext** — Opens a local Markdown document in MarkText, including when its file path is supplied by recent conversation context.
+- **illustration** — Plans, generates, and edits 16:9 Chinese article illustrations featuring the recurring AD character.
 
 ## Conventions
 

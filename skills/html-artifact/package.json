@@ -22,7 +22,7 @@
     "ai-assistant",
     "agent-skill"
   ],
-  "author": "yuanxuan",
+  "author": "taobaorun",
   "license": "MIT",
   "engines": {
     "node": ">=14.0.0"

@@ -1,8 +1,9 @@
 {
   "name": "sage-skills",
-  "description": "A curated collection of engineering skills — interactive teaching and HTML artifact generation.",
+  "version": "1.1.0",
+  "description": "A curated collection of skills for interactive teaching, HTML artifacts, AD character illustrations, and Markdown workflows.",
   "author": {
-    "name": "yuanxuan"
+    "name": "taobaorun"
   },
   "license": "MIT",
   "commands": "./.claude/commands",

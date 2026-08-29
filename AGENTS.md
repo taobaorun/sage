@@ -16,7 +16,9 @@ A collection of skills for Claude Code and Claude.ai. Skills are packaged instru
 ## Intent → Skill Mapping
 
 - Teaching / explaining / onboarding → `teacher`
-- HTML deliverables / reports / diagrams / prototypes → `html-artifact`
+- HTML deliverables / reports / prototypes → `html-artifact`
+- Open a Markdown document with MarkText → `marktext`
+- Chinese article illustrations / shot lists / AD character artwork → `illustration`
 
 ## Anti-Rationalization
 
