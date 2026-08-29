@@ -1,5 +1,5 @@
 {
   "name": "sage-skills",
-  "version": "1.0.0",
-  "description": "A curated collection of engineering skills — interactive teaching and HTML artifact generation."
+  "version": "1.1.0",
+  "description": "A curated collection of skills for teaching, HTML artifacts, software architecture diagrams, AD character illustrations, and opening Markdown documents in MarkText."
 }

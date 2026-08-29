@@ -1,0 +1,23 @@
+{
+  "skill_name": "marktext",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "请用 MarkText 打开 /tmp/release notes/2026-08-20.md",
+      "expected_output": "验证该绝对路径后，以安全引用的独立参数调用 MarkText 打开文件；不读取或修改文件。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "上一条消息里交付的 Markdown 是 /tmp/design-review.md。用 MarkText 打开刚才那个文档。",
+      "expected_output": "从最近上下文解析出 /tmp/design-review.md；可将已解析路径 fan out 给 agent，由它验证并使用 MarkText 打开后回报结果。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "在 MarkText 里打开 [迁移方案](</tmp/评审资料/迁移方案.md:37:5>)",
+      "expected_output": "从 Markdown 链接提取本地路径，去掉外层尖括号和行列后缀 :37:5，然后验证并打开 /tmp/评审资料/迁移方案.md。",
+      "files": []
+    }
+  ]
+}
