@@ -1,0 +1,4 @@
+interface:
+  display_name: "立体交互书"
+  short_description: "把复杂原理做成可翻页、可操作、有纸张质感的立体交互教学书"
+  default_prompt: "使用 $interactive-book，把我提供的主题做成一本清爽、可翻页、能操作模型的立体交互书。"

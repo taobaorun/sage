@@ -1,0 +1,12 @@
+import { build } from 'esbuild';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+const target = path.resolve(process.argv[2] || 'dist/interactive-book.html');
+const title = JSON.parse(await readFile('src/book-title.json', 'utf8')).title;
+const result = await build({ entryPoints: ['src/main.js'], bundle: true, format: 'iife', minify: true, write: false, outfile: 'book.js' });
+const js = result.outputFiles.find(file => file.path.endsWith('.js')).text.replace(/<\/script/gi, '<\\/script');
+const css = result.outputFiles.find(file => file.path.endsWith('.css')).text;
+const escape = value => String(value).replace(/[&<>"']/g, ch => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[ch]));
+const html = `<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${escape(title)} · 立体交互书</title><style>${css}</style></head><body><div id="app"></div><script>${js}</script></body></html>`;
+await mkdir(path.dirname(target), { recursive: true }); await writeFile(target, html);
+console.log(`Exported ${target} (${Buffer.byteLength(html)} bytes). Verify file:// where permitted.`);

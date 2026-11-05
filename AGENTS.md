@@ -15,10 +15,13 @@ A collection of skills for Claude Code and Claude.ai. Skills are packaged instru
 
 ## Intent → Skill Mapping
 
+- 3D pop-up / interactive teaching books and their page-turning, models, or materials → `interactive-book`
 - Teaching / explaining / onboarding → `teacher`
 - HTML deliverables / reports / prototypes → `html-artifact`
 - Open a Markdown document with MarkText → `marktext`
 - Chinese article illustrations / shot lists / AD character artwork → `illustration`
+
+For book-building requests, `interactive-book` owns the workflow. Educational subject matter alone does not turn product creation into a `teacher` conversation or require replacing the book's design with an `html-artifact` report template.
 
 ## Anti-Rationalization
 

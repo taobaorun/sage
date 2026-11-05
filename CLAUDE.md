@@ -15,6 +15,7 @@ docs/         → Setup guides
 
 ## Skills
 
+- **interactive-book** — Builds and refines browser-based pop-up teaching books with physical page turns, interactive models, progressive reading, and material guidance. Use for book-shaped interactive experiences; not ordinary PDF/EPUB conversion.
 - **teacher** — Interactive mastery-based teaching. Use when the user wants to deeply understand code, PRs, bug fixes, or technical topics.
 - **html-artifact** — Single-file HTML artifact generation with a professional design system. Use for specs, reports, prototypes, and any deliverable meant for human consumption.
 - **marktext** — Opens a local Markdown document in MarkText, including when its file path is supplied by recent conversation context.
