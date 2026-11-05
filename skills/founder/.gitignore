@@ -1,0 +1,14 @@
+# Whitelist mode: ignore everything by default, then explicitly allow
+# only the source-of-truth skill content.
+
+*
+
+# Allow this .gitignore itself
+!.gitignore
+
+# Allow the skill's substantive content
+!SKILL.md
+!README.md
+!README.zh-CN.md
+!references/
+!references/**

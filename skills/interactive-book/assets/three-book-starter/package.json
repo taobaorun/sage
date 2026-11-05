@@ -1,0 +1,15 @@
+{
+  "name": "interactive-book-starter",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "check": "node scripts/check.mjs",
+    "export:standalone": "node scripts/export-standalone.mjs"
+  },
+  "dependencies": { "three": "0.180.0" },
+  "devDependencies": { "vite": "6.4.5", "esbuild": "0.25.12" }
+}
