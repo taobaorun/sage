@@ -1,0 +1,14 @@
+{
+  "name": "teacher-diagrams",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test scripts/render-diagram.test.mjs scripts/check-model.test.mjs scripts/import-model.test.mjs scripts/build-reader.test.mjs"
+  },
+  "dependencies": {
+    "pele": "1.9.0"
+  }
+}

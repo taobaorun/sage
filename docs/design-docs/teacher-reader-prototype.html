@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>第二次查询为什么更快 · Teacher</title>
+<style>
+:root{--paper:#f7fafb;--white:#fff;--ink:#263b45;--soft:#748a95;--line:#dbe5e9;--green:#287c77;--wash:#e7f3ef;--ui:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;--book:"Songti SC","Noto Serif CJK SC",serif;--mono:"SFMono-Regular",Consolas,monospace}
+*{box-sizing:border-box}html,body{margin:0;height:100%}body{font:15px var(--ui);background:var(--paper);color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}button{font:inherit;cursor:pointer;color:inherit}button:disabled{opacity:.35;cursor:default}button:focus-visible,[tabindex]:focus-visible,summary:focus-visible{outline:2px solid var(--green);outline-offset:5px}[hidden]{display:none!important}.plain{border:0;background:none;padding:9px 12px;border-radius:5px;font-size:13px;display:inline-flex;align-items:center;gap:9px}.plain:hover{background:#e9f0f2}.icon{height:17px;width:17px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle;flex:none}
+header{height:74px;border-bottom:1px solid var(--line);padding:0 34px;display:flex;align-items:center;justify-content:space-between;position:relative;background:var(--paper);z-index:20}.brand{display:flex;align-items:center;gap:13px}.mark{font:italic 32px Georgia,serif;letter-spacing:-3px;color:var(--green)}.brand strong{font-size:15px;font-weight:600;letter-spacing:.015em}.brand .course{font-size:12px;color:var(--soft);margin-left:15px;padding-left:24px;border-left:1px solid var(--line)}.header-label{font-size:10px;color:#9aabb2;margin-right:12px;letter-spacing:.04em}.progress-line{position:absolute;bottom:-1px;left:0;height:2px;background:var(--green);width:0}.reader{height:calc(100dvh - 74px);display:flex;flex-direction:column}.reader-scroll{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable}.article{width:min(100% - 48px,698px);margin:auto;padding:58px 0 85px}.eyebrow{font-size:10px;letter-spacing:.13em;color:#859ba6;display:flex;align-items:center;gap:12px;margin-bottom:28px}.eyebrow b{font:11px var(--mono);color:var(--green);font-weight:400}.eyebrow i{display:block;height:1px;width:26px;background:#b4cccf}.lesson h1{font-size:40px;line-height:1.4;letter-spacing:-.045em;font-weight:600;margin:0 0 24px}.lede{font:23px/1.9 var(--book);color:#5d7682;margin:0 0 34px}.prose{font:20px/2.05 var(--book);letter-spacing:.012em}.prose p{margin:0 0 26px}.prose h2{font:600 21px/1.7 var(--ui);letter-spacing:-.02em;margin:40px 0 18px}.prose code{font:14px var(--mono);padding:3px 5px;border-radius:3px;background:#eaf0f2;overflow-wrap:anywhere}.prose strong{font-weight:600}.thought{font:22px/1.9 var(--book);border-left:2px solid #82b4aa;padding:3px 0 3px 22px;margin:35px 0;color:#2e6568}.request{font-family:var(--ui);border-block:1px solid var(--line);display:grid;grid-template-columns:52px 1fr;gap:18px;padding:23px 0;margin:35px 0}.request small{font:11px/2 var(--mono);color:var(--green)}.request p{font-size:17px;line-height:1.8;margin:0}.request .sub{font-size:12px;line-height:1.9;color:var(--soft);margin-top:6px}.source-callout{border-block:1px solid var(--line);padding:20px 0;margin:29px 0 35px;font-family:var(--ui)}.source-callout p{font-size:13px;color:#738c97;line-height:1.8;margin:0 0 10px}.source-button{border:0;background:none;color:var(--green);border-bottom:1px solid #9bc3ba;padding:7px 0;font:14px/1.6 var(--ui);display:inline-flex;align-items:center;gap:10px;text-align:left}.source-button:hover{border-color:var(--green)}.note{font:13px/1.9 var(--ui);color:#80939d;margin:28px 0}.endline{width:32px;height:1px;background:#a6c3bf;margin:39px 0 20px}.endnote{font:13px/1.9 var(--ui);color:#80939d}.walk{padding:0;list-style:none;counter-reset:walk;margin:28px 0;font:16px/1.95 var(--ui)}.walk li{counter-increment:walk;display:grid;grid-template-columns:28px 1fr;gap:14px;margin:0 0 28px}.walk li:before{content:counter(walk,decimal-leading-zero);font:11px/3 var(--mono);color:#87a0a5}.walk .source-button{font-size:13px;margin-top:9px}.figure{margin:32px 0}.figure svg{display:block;width:min(100%,340px);height:auto;margin:0 auto 18px}.figure figcaption{font:13px/1.9 var(--ui);color:#738b96}.diagram-text{font:16px var(--ui);fill:#36535f}.diagram-small{font:12px var(--ui);fill:#78919c}.definition{font:15px/1.9 var(--ui);padding:20px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:80px 1fr;gap:20px}.definition:last-child{border-bottom:1px solid var(--line)}.definition strong{color:var(--green);font-size:14px}.lesson details{font:14px/1.9 var(--ui);margin:20px 0;color:#6e8793}.lesson summary{cursor:pointer;color:var(--green);padding:7px 0}.lesson details p{margin-top:14px}.choice{font:15px/1.8 var(--ui);border:1px solid var(--line);background:transparent;border-radius:5px;width:100%;padding:15px 18px;display:flex;gap:12px;text-align:left;margin:9px 0}.choice:before{content:"";width:15px;height:15px;flex:none;border:1px solid #aac0c8;border-radius:50%;margin-top:5px}.choice[aria-pressed=true]{background:var(--wash);border-color:#85b5ab}.choice[aria-pressed=true]:before{border:5px solid var(--green)}.feedback{font:14px/1.9 var(--ui);color:var(--green);min-height:28px;margin:16px 0}
+footer{height:77px;flex:none;border-top:1px solid var(--line);background:var(--paper);display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 max(25px,calc((100vw - 990px)/2))}.previous{padding-left:0}.count{font:11px var(--mono);color:#7c939e;display:flex;align-items:center;gap:12px}.dots{display:flex;gap:6px}.dot{width:4px;height:4px;background:#cbdade;border-radius:3px}.dot.current{width:17px;background:var(--green)}.dot.read{background:#89b4a9}.next{font-size:13px;background:#eaf4f0;border:1px solid #c3d9d4;border-radius:5px;padding:11px 16px;color:var(--green);display:flex;align-items:center;gap:13px}.next:hover{background:#deeee6}.footer-note{font-size:11px;color:#94a6ae;margin-right:18px}.notice{position:fixed;bottom:98px;left:50%;transform:translateX(-50%);max-width:calc(100% - 28px);padding:11px 16px;background:#38535e;color:white;border-radius:7px;box-shadow:0 6px 24px #253f4917;font-size:12px;z-index:60;display:flex;align-items:center;gap:13px;white-space:nowrap}.notice button{border:0;background:none;color:white;padding:0;display:flex}.warning{font-size:12px;line-height:1.8;padding:8px 15px;text-align:center;color:#8c764b;background:#f5f1e6;position:fixed;z-index:80;top:74px;left:0;right:0}
+dialog{margin:0 0 0 auto;inset:0;height:100dvh;max-height:none;width:410px;max-width:92vw;border:0;border-left:1px solid var(--line);padding:0;color:var(--ink);background:var(--paper)}dialog::backdrop{background:#29435035;backdrop-filter:blur(3px)}.outline-wrap{display:flex;flex-direction:column;padding:28px;height:100%}.outline-head{display:flex;justify-content:space-between;align-items:center}.outline-head h2{font-size:14px;font-weight:500;margin:0}.outline-course{margin:40px 0 30px}.outline-course p{font-size:10px;color:#8b9da5;letter-spacing:.1em;margin:0 0 11px}.outline-course h3{font-size:25px;font-weight:500;line-height:1.5;letter-spacing:-.03em;margin:0}.outline-list{padding:0;margin:0;list-style:none}.outline-step{border:0;border-top:1px solid var(--line);background:none;text-align:left;width:100%;display:grid;grid-template-columns:24px 1fr 25px;gap:12px;align-items:center;padding:18px 6px;font-size:14px;line-height:1.8}.outline-step:hover{background:#ebf2f3}.outline-step[aria-current=step]{color:var(--green)}.outline-step span:first-child{font:10px var(--mono);color:#90a4ad}.outline-step span:last-child{font-size:10px;color:#84a99f}.outline-end{margin-top:auto;padding-top:30px}.outline-end p{font-size:12px;line-height:1.9;color:#8196a0}.reset{padding-left:0;font-size:12px;text-decoration:underline;text-underline-offset:4px;color:#7f959e}.reset-confirm{border-top:1px solid var(--line);padding-top:14px;margin-top:10px;font-size:12px;line-height:1.8;color:#78909b}.reset-confirm button{padding-left:0;color:var(--green);font-size:12px}.prototype-note{font-size:10px!important;color:#a0afb5!important;margin-top:28px}
+.source-mode{position:fixed;inset:74px 0 0;background:var(--paper);z-index:30;display:flex;flex-direction:column}.source-toolbar{height:61px;flex:none;padding:0 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:#f0f6f7;gap:15px}.return-reader{padding-left:0;color:var(--green)}.source-toolbar .label{font-size:12px;color:#829aa5}.source-toolbar .label strong{color:#506e7d;font-weight:500}.key{font:10px var(--mono);border:1px solid #c6d7de;padding:3px 4px;border-radius:3px;color:#96a9b2}.comparison{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}.explanation{overflow:auto;min-width:0;border-right:1px solid var(--line);overscroll-behavior:contain}.explanation-label{font-size:10px;color:#8ba0aa;padding:21px 32px 0;display:flex;justify-content:space-between;gap:15px}.compare-article{padding:30px 32px 70px;max-width:620px;margin:auto}.compare-article h1{font-size:28px}.compare-article .lede{font-size:19px}.compare-article .prose{font-size:18px}.compare-article .thought{font-size:20px}.compare-article .eyebrow{font-size:9px;margin-bottom:21px}.compare-article .source-button{font-size:12px}.compare-article .walk{font-size:14px}.source-panel{background:white;display:flex;flex-direction:column;min-width:0}.source-navigation{padding:11px 20px 6px;display:flex;justify-content:space-between;align-items:center;flex:none;gap:12px}.history{display:flex;gap:2px}.history button{color:#78939f;padding:7px}.snapshot{font-size:10px;color:#91a5ae}.files{display:flex;gap:3px;padding:0 20px 10px;border-bottom:1px solid var(--line);overflow:auto;flex:none}.file-button{font:11px var(--mono);padding:8px 10px;color:#87a0aa;border:0;background:none;border-radius:4px;white-space:nowrap}.file-button[aria-pressed=true]{color:var(--green);background:#eaf5ef}.source-heading{display:flex;justify-content:space-between;align-items:start;gap:12px;padding:20px 25px 15px;flex:none}.filename{font:12px/1.5 var(--mono);color:#526f80;margin:0}.source-location{font:11px/1.8 var(--ui);color:#879ea9;margin:5px 0 0}.source-home{font-size:11px;line-height:1.7;color:var(--green);border:0;background:none;padding:0;white-space:nowrap}.code-scroll{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:10px 0 40px;scrollbar-gutter:stable}.code-lines{min-width:max-content;padding-right:25px}.code-line{display:flex;align-items:baseline;font:12px/29px var(--mono);min-height:29px;border-left:3px solid transparent}.code-line.focused{background:#e9f5ee;border-left-color:#7fac9d}.line-number{font:10px var(--mono);width:54px;flex:none;text-align:right;padding-right:17px;user-select:none;color:#aec1ca}.code-line.focused .line-number{color:#75a191}.code-line code{font:inherit;white-space:pre;color:#57717f}.code-key{color:#77729d}.code-string{color:#578b78}.code-number{color:#967947}.symbol{font:inherit;border:0;border-bottom:1px dotted #8bb7a8;border-radius:0;background:none;padding:0;color:var(--green);line-height:inherit}.symbol:hover{background:#d8eee2;border-bottom-style:solid}.source-bottom{border-top:1px solid var(--line);padding:12px 22px;font-size:10px;color:#90a4ae;display:flex;justify-content:space-between;gap:15px;flex:none}.mobile-tabs{display:none}
+@media(min-width:1500px){.article{padding-top:72px}.lesson h1{font-size:43px}.compare-article h1{font-size:30px}}
+@media(max-width:850px){header{height:65px;padding:0 22px}.reader{height:calc(100dvh - 65px)}.source-mode{top:65px}.brand .course{font-size:10px;padding-left:14px;margin-left:5px}.header-label{display:none}.article{padding-top:40px}.lesson h1{font-size:34px}.source-toolbar{height:52px;padding:0 18px}.source-toolbar .label{display:none}.mobile-tabs{display:flex;padding:8px 15px;gap:6px;border-bottom:1px solid var(--line);background:#f0f6f7;flex:none}.mobile-tabs button{border:0;background:none;border-radius:4px;color:#8ba1ab;padding:7px;flex:1;font-size:12px}.mobile-tabs button[aria-selected=true]{background:white;color:var(--green);box-shadow:0 1px 4px #2847530d}.comparison{display:block}.explanation,.source-panel{height:100%}.explanation{border-right:0}.source-mode[data-tab=source] .explanation{display:none}.source-mode[data-tab=explain] .source-panel{display:none}.compare-article{max-width:700px;padding:30px 25px 60px}.compare-article h1{font-size:30px}.compare-article .prose{font-size:19px}.compare-article .lede{font-size:21px}.footer-note{display:none}footer{padding:0 24px;height:72px}.warning{top:65px}}
+@media(max-width:520px){header{padding:0 15px}.brand{gap:10px}.brand .course{display:none}.brand strong{font-size:14px}.mark{font-size:29px}.plain{font-size:12px}.article{width:calc(100% - 42px);padding:34px 0 60px}.eyebrow{font-size:9px;gap:9px;margin-bottom:23px}.lesson h1{font-size:30px;margin-bottom:20px}.lede{font-size:21px;line-height:1.9;margin-bottom:28px}.prose{font-size:19px;line-height:2}.prose h2{font-size:19px;margin-top:32px}.prose code{font-size:13px}.request{grid-template-columns:39px 1fr;gap:12px;padding:20px 0;margin:30px 0}.request p{font-size:16px}.request .sub{font-size:11px}.thought{font-size:21px;padding-left:17px}.source-button{font-size:13px}.source-callout p{font-size:12px}.definition{grid-template-columns:65px 1fr;gap:14px;font-size:14px}.walk{font-size:15px}.walk li{gap:9px}.figure figcaption{font-size:12px}footer{padding:0 18px;height:70px;gap:10px}.count{gap:10px;font-size:10px}.dots{gap:4px}.dot.current{width:12px}.next{font-size:12px;padding:10px 12px;gap:9px}.previous{gap:5px}.previous .icon{width:15px;height:15px}.source-navigation{padding:9px 12px 6px}.snapshot{font-size:11px}.files{padding:0 12px 9px;gap:0}.file-button{font-size:12px;padding:9px}.source-heading{padding:16px 17px 14px}.filename{font-size:12px}.source-location{font-size:11px}.source-home{font-size:12px}.code-line{font-size:13.5px;line-height:31px;min-height:31px}.line-number{width:43px;padding-right:13px}.source-bottom{font-size:11px;padding:11px 15px}.key{display:none}.compare-article{padding:28px 21px 60px}.compare-article h1{font-size:28px}.compare-article .prose{font-size:18px}.compare-article .lede{font-size:20px}.explanation-label{padding-inline:21px;font-size:11px}.outline-wrap{padding:23px}.outline-course h3{font-size:23px}.notice{font-size:11px;bottom:89px;gap:9px}.choice{font-size:14px;padding:14px}}
+.cache-figure{margin:34px 0 40px;font-family:var(--ui)}.diagram-heading{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin:0 0 16px}.diagram-heading strong{font-size:15px;font-weight:600;color:#36535f}.diagram-heading span{font-size:12px;color:#617985}.path-selector{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 21px;max-width:100%}.path-selector button{border:1px solid transparent;border-radius:5px;background:none;color:#526f7c;font-size:12px;line-height:1.6;min-height:39px;padding:8px 11px}.path-selector button:hover{background:#edf3f4}.path-selector button[aria-pressed=true]{background:#e7f3ef;border-color:#accfc3;color:#235e59;font-weight:600}.path-selector button[aria-pressed=true]:before{content:"✓";display:inline-block;margin-right:6px}.cache-figure svg{display:block;width:100%;height:auto;margin:0}.cache-figure .diagram-narrow{display:none}.cache-figure svg.teacher-legacy .diagram-node rect{fill:#f0f5f6;stroke:#b9ced6;stroke-width:1.1}.cache-figure svg.teacher-legacy .diagram-node .node-title{font:500 16px var(--ui);fill:#2c4e5c}.cache-figure svg.teacher-legacy .diagram-node .node-detail{font:13px var(--ui);fill:#536f7c}.cache-figure svg.teacher-legacy .diagram-node .node-number{font:11px var(--mono);fill:#4f7479}.cache-figure .route{fill:none;stroke:#6f969c;stroke-width:1.8}.cache-figure .route-label{font:500 13px var(--ui);fill:#476b78}.cache-figure [data-path-part]{transition:opacity .15s ease}.cache-figure [data-path-part].path-dim{opacity:.22}.cache-figure [data-path-part].path-active rect{fill:#e0f1e7;stroke:#4e9482;stroke-width:1.7}.cache-figure [data-path-part].path-active .route{stroke:#287c67;stroke-width:2.5}.cache-figure .path-explanation{font:14px/1.85 var(--ui);color:#3f6571;margin:17px 0 13px;min-height:51px;padding-left:14px;border-left:2px solid #8ab7ab}.cache-figure figcaption{font:12px/1.9 var(--ui);color:#617985}.compare-article .diagram-heading{display:block}.compare-article .diagram-heading span{display:block;margin-top:6px}.compare-article .cache-figure .diagram-wide{display:none}.compare-article .cache-figure .diagram-narrow{display:block;max-width:340px;margin:auto}.compare-article .path-selector{gap:3px}.compare-article .path-selector button{font-size:11px;padding-inline:8px}
+@media(max-width:600px){.cache-figure .diagram-wide{display:none}.cache-figure .diagram-narrow{display:block;max-width:340px;margin:auto}.diagram-heading{display:block}.diagram-heading span{display:block;font-size:12px;margin-top:5px}.path-selector{gap:4px;display:grid;grid-template-columns:1fr 1fr}.path-selector button{font-size:12px;padding:9px 7px;min-height:42px}.path-selector button:first-child{grid-column:1 / -1}.cache-figure .path-explanation{font-size:13px;min-height:0}.cache-figure svg.teacher-legacy .diagram-node .node-detail{font-size:14px}.cache-figure svg.teacher-legacy .diagram-node .node-number{font-size:12px}.cache-figure .route-label{font-size:14px}.compare-article .path-selector button{font-size:12px;padding-inline:7px}}
+.history button{min-width:40px;min-height:40px;justify-content:center;padding:8px;font-size:17px;color:#526f7c;border:1px solid transparent}.history button:not(:disabled):hover{border-color:#c8dce0;background:#eef5f5}.file-button{min-height:40px;padding:10px 12px;font-size:12px;color:#5d7885}.file-button[aria-pressed=true]{box-shadow:inset 0 -2px #478b79;font-weight:600}.source-heading-text{min-width:0;flex:1}.source-heading{padding-bottom:12px;gap:14px}.source-home{min-height:40px;padding:8px 10px;border:1px solid #bfd6d0;border-radius:5px;background:#f4f9f7;color:#2c6c61;font-size:12px;flex:none}.source-home:hover{background:#e7f3ec}.source-location{color:#5e7886;font-size:12px}.filename{font-size:13px;color:#3c5a6c}.source-orientation{display:flex;align-items:center;gap:9px;padding:0 25px 14px;font-size:11px;line-height:1.75;color:#5f7c89}.source-context{flex:none;font-size:10px;letter-spacing:.03em;border:1px solid #c8dcd9;border-radius:3px;padding:2px 6px;color:#3b7168;background:#f3f9f5}.source-context[data-exploring=true]{color:#6e6487;background:#f5f3f8;border-color:#d9d4e4}.source-tools{display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding:7px 18px;border-top:1px solid #edf2f3;border-bottom:1px solid var(--line);font-size:11px}.source-tools button{min-height:38px;border:1px solid transparent;background:none;color:#496d7a;padding:8px 9px;border-radius:4px;font-size:12px;white-space:nowrap}.source-tools button:hover{background:#eef5f5}.source-tools button[aria-pressed=true]{border-color:#bdd6cf;background:#e9f4ef;color:#2f6e60}.source-tools button[aria-pressed=true]:before{content:"✓";margin-right:5px}.source-tools [role=status]{color:#4f7476;font-size:11px;line-height:1.8;flex:1;min-width:80px;padding:0 5px}.code-line{font-size:13px;line-height:30px;min-height:30px}.code-line code{color:#435e70}.code-key{color:#695c8b}.code-string{color:#3c785f}.code-number{color:#875f32}.line-number{font-size:11px;color:#617a86}.code-line.focused{background:#edf6ef;border-left-color:#549780}.code-line.focused .line-number{color:#3f7665;font-weight:600}.code-scroll.is-wrapped .code-lines{min-width:0;padding-right:16px}.code-scroll.is-wrapped .code-line{align-items:flex-start}.code-scroll.is-wrapped .code-line code{min-width:0;flex:1;white-space:pre-wrap;overflow-wrap:anywhere}.source-bottom{font-size:11px;color:#5f7b88}.snapshot{font-size:11px;color:#627e8b}.symbol:focus-visible{outline-offset:2px}
+@media(max-width:520px){.source-navigation{padding-top:7px;padding-bottom:4px}.history button{min-width:40px;min-height:40px}.files{padding-bottom:6px}.file-button{font-size:12px;min-height:40px;padding:9px}.source-heading{padding:14px 16px 10px;gap:9px}.filename{font-size:12px}.source-location{font-size:11px}.source-home{padding:8px;font-size:12px;max-width:115px;white-space:normal}.source-orientation{padding:0 16px 11px;gap:7px;font-size:11px;align-items:flex-start}.source-context{font-size:10px}.source-tools{padding:5px 8px;gap:0}.source-tools button{font-size:12px;min-height:40px;padding-inline:8px}.source-tools [role=status]{flex-basis:100%;min-height:0;padding:0 8px;font-size:11px}.source-tools [role=status]:empty{display:none}.code-line{font-size:13.5px;line-height:31px;min-height:31px}.source-bottom{font-size:11px;line-height:1.6;gap:10px}.source-bottom span:last-child{max-width:170px;text-align:right}}
+.qa-component{margin:30px 0 35px;font-family:var(--ui)}.qa-fieldset{border:0;margin:0;padding:0;min-width:0}.qa-fieldset legend{display:block;padding:0;margin:0 0 18px;font-size:17px;line-height:1.9;font-weight:500;max-width:100%}.qa-component .choice{cursor:pointer;align-items:flex-start;min-height:60px;padding:16px 18px;gap:14px;font-size:15px;line-height:1.85;position:relative}.qa-component .choice:before{display:none}.qa-component .choice:hover{background:#f0f5f5}.qa-component .choice input{width:18px;height:18px;flex:none;margin:5px 0 0;accent-color:#287c67;cursor:pointer}.qa-component .choice:focus-within{outline:2px solid #287c77;outline-offset:3px}.qa-component .choice input:focus-visible{outline:none}.qa-component .choice[data-selected=true]{border-color:#82b2a5;background:#eaf4ef}.qa-component .choice[data-evaluated=true][data-correct=false]{border-color:#bfa88b;background:#f7f3ec}.choice-index{display:inline-block;font:11px/1.8 var(--mono);color:#627e89;min-width:22px;margin-right:6px}.qa-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px}.qa-actions button{min-height:44px;line-height:1.7;padding:10px 16px;border-radius:5px;font-size:13px}.qa-check{background:#e6f2eb;color:#2f6d60;border:1px solid #a8cbc0}.qa-check:not(:disabled):hover{background:#dceee3}.qa-retry{border:1px solid transparent;background:none;color:#5e7984}.qa-retry:not(:disabled):hover{background:#edf3f4}.qa-state{font:12px/1.9 var(--ui)!important;color:#5a7581;min-height:23px;margin:13px 0 0!important}.qa-feedback{padding:17px 19px;margin-top:21px;border-left:3px solid #77a896;background:#edf5f0}.qa-feedback strong{font-size:14px;font-weight:600;line-height:1.8;color:#345f56}.qa-feedback p{font:14px/1.95 var(--ui);color:#436c65;margin:8px 0 0!important}.compare-article .qa-fieldset legend{font-size:16px}.compare-article .qa-component .choice{font-size:14px;padding:13px}
+@media(max-width:520px){.qa-fieldset legend{font-size:16px;margin-bottom:16px}.qa-component .choice{font-size:14px;padding:15px 13px;gap:12px}.qa-actions{gap:6px}.qa-actions button{font-size:13px;min-height:44px}.qa-feedback{padding:15px 15px}.qa-feedback strong,.qa-feedback p{font-size:13px}.qa-state{font-size:12px!important}}
+:root{--soft:#536e7b}.filename-row{display:flex;align-items:center;flex-wrap:wrap;gap:7px 9px}.filename-row .source-context{font-size:10px;line-height:1.7}.eyebrow{font-size:11px;color:#536e7b;letter-spacing:.09em}.request .sub,.source-callout p,.note,.endnote,.lesson details,.footer-note,.count,.outline-end p,.outline-course p,.outline-num,.source-toolbar .label,.explanation-label,.source-bottom,.snapshot,.source-location,.qa-state,.diagram-heading span,.cache-figure figcaption{color:#536e7b}.request .sub,.source-callout p,.note,.endnote,.lesson details{font-size:13px}.header-label,.prototype-note{color:#5a707c!important;font-size:11px!important}.outline-step span:first-child{font-size:11px;color:#536e7b}.outline-step span:last-child{font-size:11px;color:#3f7568}.outline-course p{font-size:11px}.outline-progress{font-size:12px}.footer-note,.count{font-size:12px}.source-toolbar .label strong{color:#3f5f6e}.explanation-label{font-size:11px}.line-number{color:#586f7b}.code-line.focused .line-number{color:#3f6f60}.previous,.next,.outline-head .plain,.outline-trigger,.return-reader,#outline-open{min-height:42px}.previous{min-width:88px}.plain:disabled,.next:disabled,.qa-actions button:disabled{opacity:1;color:#95a7af;border-color:#d9e3e6;background:transparent}.plain:disabled:hover{background:transparent}.outline-head .plain{min-width:42px;justify-content:center}.outline-step[aria-current=step]{background:#edf5f2;border-left:2px solid #548f7d;padding-left:10px}.outline-step[aria-current=step] span:nth-child(2){font-weight:600}button:focus-visible,input:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:2px solid #287c77;outline-offset:3px}.mobile-tabs button{min-height:40px}.source-copy-fallback{position:fixed;left:-10000px;top:0;width:1px;height:1px;opacity:0}.notice button{min-width:28px;min-height:28px;justify-content:center;align-items:center}
+@media(max-width:520px){.eyebrow{font-size:11px;letter-spacing:.045em}.eyebrow b{font-size:11px}.footer-note,.count{font-size:11px}.request .sub{font-size:12px}.source-callout p,.note,.endnote,.lesson details{font-size:13px}.explanation-label{font-size:11px}.source-panel{display:grid;grid-template-columns:92px minmax(0,1fr);grid-template-rows:52px auto auto auto minmax(0,1fr) auto;min-height:0}.source-navigation{grid-column:1;grid-row:1;padding:5px 0 5px 9px;border-bottom:1px solid var(--line);justify-content:flex-start}.source-navigation .snapshot{display:none}.history{gap:1px}.history button{padding:7px;min-width:40px}.files{grid-column:2;grid-row:1;min-width:0;padding:6px 9px 5px 0;align-items:center;gap:1px}.file-button{padding:9px 8px}.source-heading{grid-column:1 / -1;grid-row:2;padding:13px 16px 10px}.source-orientation{grid-column:1 / -1;grid-row:3;padding:0 16px 10px}.source-tools{grid-column:1 / -1;grid-row:4}.code-scroll{grid-column:1 / -1;grid-row:5;min-width:0}.source-bottom{grid-column:1 / -1;grid-row:6}.filename-row{gap:5px 7px}.filename-row .source-context{font-size:10px}.source-bottom span:last-child{max-width:190px}.compare-article .eyebrow{font-size:10px}.outline-end .prototype-note{font-size:11px!important}.notice button{min-width:30px;min-height:30px}}
+.source-orientation,.choice-index{color:#536e7b}.filename-row .source-context{font-size:11px}.compare-article .eyebrow{font-size:11px}
+@media(max-width:520px){.filename-row .source-context,.compare-article .eyebrow{font-size:11px}}
+.qa-fieldset legend,.compare-article .qa-fieldset legend{font-size:18px}.qa-component .choice,.compare-article .qa-component .choice{font-size:16px}.qa-feedback strong,.qa-feedback p{font-size:15px}.qa-actions button{font-size:14px}.qa-state{font-size:13px!important}
+@media(max-width:520px){.qa-fieldset legend,.compare-article .qa-fieldset legend{font-size:18px}.qa-component .choice,.compare-article .qa-component .choice{font-size:16px}.qa-feedback strong,.qa-feedback p{font-size:15px}.qa-actions button{font-size:14px}}
+.next:not(:disabled),.qa-retry:not(:disabled){color:#23675d}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+/* teacher-pele-style */
+.teacher-focus-muted{opacity:.22}.teacher-focus-active{opacity:1}.cache-figure svg[data-teacher-renderer="pele"],.viz-frame svg[data-teacher-renderer="pele"]{width:auto;max-width:100%;height:auto;margin-inline:auto;font-size:16px}.teacher-diagram-credit{font:11px/1.8 var(--ui);color:#536e7b;margin-top:12px}.teacher-pele-projection{margin:24px 0 30px}.teacher-pele-projection>p{font:13px/1.9 var(--ui);color:#536e7b;margin:0 0 12px}.teacher-pele-projections{display:none}@media(max-width:760px){.viz-frame>.teacher-pele-projections{display:block}}
+/* /teacher-pele-style */
+</style><style id="teacher-reader-theme-style">
+:root{--reader-canvas:#f5f4ed;--reader-surface:#faf9f5;--reader-surface-alt:#eeece3;--reader-ink:#141413;--reader-muted:#5b5953;--reader-line:#d9d5c8;--reader-accent:#1b365d;--reader-accent-soft:#e4ecf5;--reader-figure-line:#68655b;--reader-figure-border:#8b877a;--reader-code-keyword:#1b365d;--reader-code-string:#535843;--reader-code-number:#6e5140;--reader-good:#315b45;--reader-good-soft:#e9f0e6;--reader-bad:#8a3b42;--reader-bad-soft:#f6eaea;--reader-font-reading:TsangerJinKai02, Source Han Serif SC, Noto Serif CJK SC, Noto Serif SC, Songti SC, STSong, SimSun, Georgia, serif;--reader-font-ui:PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, system-ui, sans-serif;--reader-font-mono:JetBrains Mono, SF Mono, Menlo, Consolas, PingFang SC, monospace;color-scheme:light;--paper:var(--reader-canvas);--white:var(--reader-surface);--surface:var(--reader-surface);--ink:var(--reader-ink);--muted:var(--reader-muted);--soft:var(--reader-muted);--line:var(--reader-line);--accent:var(--reader-accent);--green:var(--reader-accent);--wash:var(--reader-accent-soft);--ui:var(--reader-font-ui);--reading:var(--reader-font-reading);--book:var(--reader-font-reading);--mono:var(--reader-font-mono)}
+:root[data-reader-theme="paper"]{--reader-canvas:#f5f4ed;--reader-surface:#faf9f5;--reader-surface-alt:#eeece3;--reader-ink:#141413;--reader-muted:#5b5953;--reader-line:#d9d5c8;--reader-accent:#1b365d;--reader-accent-soft:#e4ecf5;--reader-figure-line:#68655b;--reader-figure-border:#8b877a;--reader-code-keyword:#1b365d;--reader-code-string:#535843;--reader-code-number:#6e5140;--reader-good:#315b45;--reader-good-soft:#e9f0e6;--reader-bad:#8a3b42;--reader-bad-soft:#f6eaea;color-scheme:light}
+:root[data-reader-theme="white"]{--reader-canvas:#ffffff;--reader-surface:#fafaf7;--reader-surface-alt:#f0efe9;--reader-ink:#181816;--reader-muted:#5c5b55;--reader-line:#dedbd2;--reader-accent:#243f63;--reader-accent-soft:#e8eef6;--reader-figure-line:#68665e;--reader-figure-border:#89867c;--reader-code-keyword:#243f63;--reader-code-string:#505943;--reader-code-number:#6e5140;--reader-good:#315b45;--reader-good-soft:#edf3e9;--reader-bad:#8a3b42;--reader-bad-soft:#f9eded;color-scheme:light}
+:root[data-reader-theme="night"]{--reader-canvas:#1c1c1a;--reader-surface:#242420;--reader-surface-alt:#30302a;--reader-ink:#ece8df;--reader-muted:#bab5aa;--reader-line:#49483f;--reader-accent:#a8c5e5;--reader-accent-soft:#293545;--reader-figure-line:#b2ada1;--reader-figure-border:#939082;--reader-code-keyword:#b5cdec;--reader-code-string:#c2ccac;--reader-code-number:#d8bfa6;--reader-good:#b6d0b0;--reader-good-soft:#29362a;--reader-bad:#e2b0b4;--reader-bad-soft:#3c292d;color-scheme:dark}
+html,body,.app-header,header,footer,.reader,.reader-view,.reading-footer,.source-mode,.outline-dialog,dialog,.explanation,.explanation-pane,.workspace{background:var(--reader-canvas);color:var(--reader-ink)}
+.sidebar,.mobile-head,.source-toolbar,.comparison-toolbar,.mobile-tabs,.source-demo-head,.sample-label,.source-tools,.demo-source-nav{background:var(--reader-surface-alt);color:var(--reader-muted)}
+.source-panel,.source-pane,.sample-frame,.sample-body,.source-demo,.type-popover,.demo-source-viewport,.qa-workshop textarea,.reader-settings-dialog{background:var(--reader-surface);color:var(--reader-ink)}
+.lesson h1,.lesson h2,.lesson .prose h2,.page-head h1,.sample-body h2,.sample-body h3,.outline-course h3,.reader-settings-dialog h2{font-family:var(--reader-font-reading);font-weight:500;color:var(--reader-ink);letter-spacing:0}
+.lesson .prose,.lesson .lede,.lesson .thought,.reader-copy{font-family:var(--reader-font-reading);font-weight:400;color:var(--reader-ink)}
+.lesson .prose strong,.reader-copy strong,.sample-notes strong{font-weight:500;color:var(--reader-ink)}
+.lesson .prose h2{font-size:23px}.lesson h1{font-weight:500}.lesson .lede{color:var(--reader-muted)}
+.thought,.key-thought,.instruction,.source-callout,.sample-frame{border-left:0}.thought,.key-thought,.instruction{padding-left:0;color:var(--reader-ink)}.sample-frame{border-top:0}.sample-label{border-bottom:1px solid var(--reader-line);background:transparent}.diagram-heading strong{font-weight:500}
+.eyebrow,.step-eyebrow,.step-eyebrow b,.eyebrow b,.step-count,.count,.course,.course-name,.header-label,.prototype-note,.footer-note,.note,.endnote,.lesson-end,.annotation,.source-hint,.source-callout p,.request .sub,.request-note .request-small,.request small,.outline-end p,.outline-course p,.outline-step span:first-child,.outline-step span:last-child,.source-location,.anchor-description,.source-origin,.source-orientation,.snapshot,.source-snapshot,.source-bottom,.reading-cue,.footnote,.sample-notes,.sample-notes dt,.sample-notes h2,.acceptance,.page-head>p,.workshop-label,.sidebar-sub,.sidebar-foot,.scenario-row p,.scope-note,.future-list,.cache-figure figcaption,.figure figcaption,.viz-frame figcaption,.diagram-heading span,.cache-figure .path-explanation,.viz-takeaway,.explanation-label,.source-demo-head,.source-demo-head .source-step,.demo-source-path small,.qa-hint-line,.qa-state,.qa-hints,.qa-workshop details,.lesson details,.demo-source-status,.source-tools [role=status],.diagram-provenance,.teacher-diagram-credit{color:var(--reader-muted)!important}
+h1,h2,h3,.lesson strong,.filename,.file-name,.source-demo-head strong,.source-current p,.diagram-heading strong,.sample-body th,.source-toolbar .label strong,.comparison-title strong,.qa-fieldset legend,.qa-workshop legend{color:var(--reader-ink)}
+.source-toolbar>span:last-child,.comparison-toolbar>span:last-child{color:var(--reader-muted)!important}
+.brand-mark,.brand-sign,.mark,.source-button,.source-entry,.source-home,.demo-source-nav button,.history button,.source-history .plain,.small-button,.sample-button,.design-controls button,.next,.next:not(:disabled),.qa-check,.qa-retry:not(:disabled),.qa-actions button,.source-tools button,.path-selector button,.long-label-control,.outline-reset,.reset,.reset-confirm button,.return-reader,.source-inline,.symbol,.code-symbol,.lesson summary,.sample-body summary,.source-demo-head strong,a{color:var(--reader-accent)}
+.plain,.sample-button.secondary,.qa-retry,.design-controls button,.file-button,.source-file,.demo-file-tabs button,.source-inline,.symbol,.code-symbol,.path-selector button{background:transparent}
+.plain:not(:disabled):hover,.sample-button.secondary:not(:disabled):hover,.qa-retry:not(:disabled):hover,.file-button:hover,.source-file:hover,.demo-file-tabs button:hover,.path-selector button:hover,.source-tools button:hover,.source-inline:hover,.symbol:hover,.code-symbol:hover,.design-controls button:hover{background:var(--reader-surface-alt)}
+.next,.sample-button.primary,.qa-check,.source-home,.source-context,.source-state-label,.source-tools button[aria-pressed=true],.component-nav button[aria-current=page],.case-switcher button[aria-pressed=true],.path-selector button[aria-pressed=true],.design-controls button[aria-pressed=true],.small-button[aria-pressed=true],.outline-step[aria-current=step],.file-button[aria-pressed=true],.source-file[aria-pressed=true],.demo-file-tabs button[aria-pressed=true],.mobile-tabs button[aria-selected=true],.mobile-compare-tabs button[aria-selected=true],.type-option[aria-pressed=true]{background:var(--reader-accent-soft);border-color:var(--reader-figure-border);color:var(--reader-accent);font-weight:500}
+.next:not(:disabled):hover,.sample-button.primary:not(:disabled):hover,.qa-check:not(:disabled):hover{background:var(--reader-accent-soft);color:var(--reader-accent)}
+.file-button[aria-pressed=true],.demo-file-tabs button[aria-pressed=true]{box-shadow:inset 0 -2px var(--reader-accent)}.source-context[data-exploring=true]{background:var(--reader-surface-alt);border-color:var(--reader-line);color:var(--reader-ink)}
+.code-line code,.demo-code-line code,.code-scroll,.demo-source-viewport,.qa-workshop pre,.lesson pre{color:var(--reader-ink);background:var(--reader-surface)}.code-key,.source-key{color:var(--reader-code-keyword)}.code-string,.source-string{color:var(--reader-code-string)}.code-number{color:var(--reader-code-number)}.line-number,.demo-line-number,.code-comment{color:var(--reader-muted)}
+.code-line.focused,.demo-code-line.target{background:var(--reader-accent-soft);border-left-color:var(--reader-accent)}.code-line.focused .line-number{color:var(--reader-accent);font-weight:500}
+.code-line>code,.demo-code-line>code{background:transparent}
+.prose code,.reader-copy code,.inline-code,.qa-workshop pre,.lesson pre{background:var(--reader-surface-alt);color:var(--reader-ink)}
+.qa-component .choice,.qa-choice,.question-choice,.choice{background:var(--reader-surface);border-color:var(--reader-line);color:var(--reader-ink)}.qa-component .choice[data-selected=true],.qa-choice:has(input:checked),.question-choice[aria-pressed=true],.choice[aria-pressed=true]{background:var(--reader-accent-soft);border-color:var(--reader-accent)}.qa-component .choice[data-evaluated=true][data-correct=false]{background:var(--reader-bad-soft);border-color:var(--reader-bad)}
+.qa-feedback,.qa-output{background:var(--reader-surface-alt);border-left:0;color:var(--reader-ink)}.qa-feedback strong,.qa-feedback p,.qa-output strong{color:var(--reader-ink)}.choice-index{color:var(--reader-muted)}input{accent-color:var(--reader-accent)}
+.figure,.request,.request-note,.definition,.source-callout,.source-navigation,.source-current,.source-bottom,.source-tools,.source-heading,.source-orientation,.files,.source-files,.source-demo,.demo-source-head,.demo-file-tabs,.demo-source-nav,.demo-source-status,.demo-source-path,.qa-workshop textarea,.qa-choice,.choice,.question-choice,.outline-step,.scenario-row,.scope-note,.sample-frame,.case-switcher,.mobile-head,header,footer,.sidebar,.comparison-toolbar,.source-toolbar,.explanation,.explanation-pane,.reading-divider:before,.reading-divider:after,.sample-body td,.sample-body th,.source-tools{border-color:var(--reader-line)}
+.sample-body th,.source-demo-head,.mobile-tabs,.mobile-compare-tabs,.design-controls,.missing-source{background:var(--reader-surface-alt)}.missing-source h3,.missing-source p{color:var(--reader-ink)}.source-home,.small-button,.sample-button,.design-controls button,.case-switcher button{border-color:var(--reader-line)}
+.plain:disabled,.next:disabled,.qa-actions button:disabled,.sample-button:disabled,.source-tools button:disabled,.demo-source-nav button:disabled{background:transparent!important;color:var(--reader-muted)!important;border-color:var(--reader-line);opacity:.48}.plain:disabled:hover{background:transparent}
+.step-dot,.dot{background:var(--reader-line)}.step-dot.current,.dot.current,.header-progress,.progress-line,.step-dot.read,.dot.read{background:var(--reader-accent)}.eyebrow i,.small-line,.step-eyebrow .small-line,.endline,.end-mark,.hairline{background:var(--reader-line)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible,summary:focus-visible,[tabindex]:focus-visible,.qa-component .choice:focus-within,.qa-choice:focus-within{outline-color:var(--reader-accent)}.source-inline,.symbol,.code-symbol,.source-button,.source-entry{border-bottom-color:var(--reader-figure-border)}
+.notice,.resume-notice{background:var(--reader-ink);color:var(--reader-canvas)}.notice button,.resume-notice button{color:var(--reader-canvas)}.warning,.storage-warning{background:var(--reader-bad-soft);color:var(--reader-bad)}
+svg[data-teacher-renderer="pele"] [data-teacher-observed="true"]>:is(rect,path,polygon,ellipse,circle){fill:var(--reader-accent-soft)!important;stroke:var(--reader-accent)!important;stroke-width:2px}
+dialog.reader-settings-dialog{margin:auto;inset:0;width:min(440px,calc(100vw - 32px));height:auto;max-height:calc(100dvh - 40px);padding:27px;border:1px solid var(--reader-line);border-radius:8px;background:var(--reader-surface);color:var(--reader-ink)}.reader-settings-dialog::backdrop{background:#14141366;backdrop-filter:blur(2px)}
+.reader-settings-head{display:flex;align-items:center;justify-content:space-between;gap:20px}.reader-settings-head h2{font-size:27px;line-height:1.6;margin:0}.reader-settings-close{min-width:42px;min-height:42px;border:0;background:transparent;color:var(--reader-muted);font-size:18px}.reader-settings-dialog p{font:14px/1.95 var(--reader-font-ui);color:var(--reader-muted);margin:16px 0 21px}.reader-settings-dialog fieldset{border:0;margin:0;padding:0;min-width:0}.reader-settings-dialog legend{font:12px/1.8 var(--reader-font-ui);color:var(--reader-muted);margin-bottom:12px}.reader-theme-choice{display:flex;align-items:center;gap:14px;min-height:72px;padding:12px 14px;margin:8px 0;border:1px solid var(--reader-line);border-radius:5px;cursor:pointer}.reader-theme-choice:has(input:checked){border-color:var(--reader-accent);background:var(--reader-accent-soft)}.reader-theme-choice input{width:18px;height:18px;flex:none;margin:0;accent-color:var(--reader-accent)}.reader-theme-choice strong{font:500 21px/1.5 var(--reader-font-reading);color:var(--reader-ink);display:block}.reader-theme-choice small{font:12px/1.8 var(--reader-font-ui);color:var(--reader-muted);display:block}.reader-theme-swatch{width:31px;height:42px;border:1px solid var(--reader-line);border-radius:2px;margin-left:auto;flex:none;font:18px/40px var(--reader-font-reading);text-align:center}.teacher-settings-trigger{min-height:42px;border:0;background:transparent;color:var(--reader-muted);padding:9px 11px;font:13px var(--reader-font-ui)}.teacher-settings-trigger:hover{background:var(--reader-surface-alt)}.reader-settings-status{font-size:12px!important;margin-bottom:0!important;min-height:22px}.workshop-label .teacher-settings-trigger{margin-left:auto;white-space:nowrap}
+@media(max-width:520px){.teacher-settings-trigger{font-size:12px;padding-inline:9px}.reader-settings-dialog{padding:22px!important}.lesson .prose h2{font-size:22px}.reader-theme-choice{min-height:76px}.reader-settings-head h2{font-size:26px}.workshop-label{align-items:center}.source-heading .source-home{background:var(--reader-accent-soft)}}
+</style>
+<style id="teacher-motion-style">
+.teacher-motion{margin:18px 0 22px;padding:15px 0 17px;border-block:1px solid var(--reader-line);font:13px/1.85 var(--reader-font-ui);color:var(--reader-muted)}
+.teacher-motion-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}.teacher-motion-heading strong{font:500 13px var(--reader-font-ui);color:var(--reader-ink)}.teacher-motion-count{font:11px var(--reader-font-mono);color:var(--reader-muted)}
+.teacher-motion-actions{display:flex;align-items:center;flex-wrap:wrap;gap:5px}.teacher-motion-actions button{min-height:42px;border:1px solid transparent;border-radius:4px;background:transparent;color:var(--reader-accent);padding:8px 11px;font:13px/1.8 var(--reader-font-ui)}.teacher-motion-actions button:hover{background:var(--reader-surface-alt)}.teacher-motion-actions [data-motion-action="play"]{background:var(--reader-accent-soft);border-color:var(--reader-line)}.teacher-motion-actions button:disabled{opacity:.45;color:var(--reader-muted);background:transparent;cursor:default}
+.teacher-motion-caption{font:14px/1.9 var(--reader-font-ui);color:var(--reader-ink);margin:12px 0 5px!important}.teacher-motion-note{font:12px/1.8 var(--reader-font-ui);color:var(--reader-muted);margin:0!important}
+svg[data-teacher-renderer="pele"] .teacher-demo-current{opacity:1!important}svg[data-teacher-renderer="pele"] .teacher-demo-current>:is(rect,path,polygon,ellipse,circle){fill:var(--reader-accent-soft)!important;stroke:var(--reader-accent)!important;stroke-width:2.3px}
+svg[data-teacher-renderer="pele"] .teacher-demo-edge{opacity:1!important}svg[data-teacher-renderer="pele"] :is(path,line,polyline).teacher-demo-edge,svg[data-teacher-renderer="pele"] .teacher-demo-edge :is(path,line,polyline){stroke:var(--reader-accent)!important;stroke-width:2.5px}
+.teacher-request-token{fill:var(--reader-accent);stroke:var(--reader-surface);stroke-width:2px;pointer-events:none}
+@media(max-width:520px){.teacher-motion{margin:17px 0 22px}.teacher-motion-actions{gap:3px}.teacher-motion-actions button{font-size:12px;min-height:42px;padding-inline:9px}.teacher-motion-heading{align-items:baseline}.teacher-motion-heading strong{font-size:12px}.teacher-motion-count{font-size:11px}.teacher-motion-caption{font-size:13px}.teacher-motion-note{font-size:12px}}
+</style>
+</head>
+<body>
+<header><div class="brand"><span class="mark" aria-hidden="true">t.</span><strong>teacher</strong><span class="course">第二次查询为什么更快</span></div><div><span class="header-label">交互原型 · 教学示例</span><button class="teacher-settings-trigger" data-reader-settings aria-haspopup="dialog">阅读设置</button><button class="plain" id="outline-open" aria-haspopup="dialog"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h8M3 6h.1M3 12h.1M3 18h.1"/></svg>课程目录</button></div><div class="progress-line" id="progress" aria-hidden="true"></div></header>
+<div class="warning" id="warning" hidden role="status">浏览器未允许保存，本次关闭后无法恢复阅读位置。</div>
+<main class="reader" id="reader"><div class="reader-scroll" id="reader-scroll" tabindex="-1" aria-label="当前学习步骤"><article class="article lesson" id="article"></article></div><footer aria-label="学习步骤导航"><button class="plain previous" id="previous"><span aria-hidden="true">←</span>上一步</button><div class="count"><span id="count"></span><span class="dots" id="dots" aria-hidden="true"></span></div><div style="display:flex;align-items:center"><span class="footer-note">按自己的节奏</span><button class="next" id="next">下一步<span aria-hidden="true">→</span></button></div></footer></main>
+<section class="source-mode" id="source-mode" data-tab="source" aria-label="源码对照" hidden><div class="source-toolbar"><button class="plain return-reader" id="return-reader"><span aria-hidden="true">←</span>返回阅读<span class="key">Esc</span></button><span class="label">保持在当前讲解 · <strong id="compare-title"></strong></span><span style="font-size:11px;color:#8a9fa9">源码对照</span></div><div class="mobile-tabs" role="tablist" aria-label="对照视图"><button role="tab" id="explain-tab" data-tab="explain" aria-selected="false" aria-controls="explanation">当前讲解</button><button role="tab" id="source-tab" data-tab="source" aria-selected="true" aria-controls="source-panel">源码</button></div><div class="comparison"><section class="explanation" id="explanation" aria-label="当前讲解"><div class="explanation-label"><span>当前讲解</span><span>探索源码不会切换学习步骤</span></div><article class="compare-article lesson" id="compare-article"></article></section><section class="source-panel" id="source-panel" aria-label="完整源码"><div class="source-navigation"><div class="history"><button class="plain" id="source-back" aria-label="返回上个源码位置" title="返回上个源码位置">←</button><button class="plain" id="source-forward" aria-label="前往下个源码位置" title="前往下个源码位置">→</button></div><span class="snapshot">教学示例项目 · 源码快照 v1</span></div><div class="files" id="files" aria-label="收录的完整文件"></div><div class="source-heading"><div class="source-heading-text"><div class="filename-row"><p class="filename" id="filename"></p><span id="source-context" class="source-context"></span></div><p class="source-location" id="source-location"></p></div><button class="source-home" id="source-home">回到本步源码</button></div><div class="source-orientation" id="source-orientation"><span id="source-origin"></span></div><div class="source-tools"><button id="source-wrap" aria-pressed="false">自动换行</button><button id="source-copy">复制完整文件</button><span id="source-copy-status" role="status" aria-live="polite"></span></div><div class="code-scroll" id="code-scroll" tabindex="0" aria-label="源码内容"><div class="code-lines" id="code-lines"></div></div><div class="source-bottom"><span id="line-count"></span><span>下划线函数可追读 · 示例 v1</span></div></section></div></section>
+<dialog id="outline" aria-labelledby="outline-title"><div class="outline-wrap"><div class="outline-head"><h2 id="outline-title">课程目录</h2><button class="plain" id="outline-close" aria-label="关闭目录">✕</button></div><div class="outline-course"><p>一堂源码小课 · 4 个步骤</p><h3>第二次查询<br>为什么更快</h3></div><ol class="outline-list" id="outline-list"></ol><div class="outline-end"><p id="read-progress"></p><button class="plain reset" id="reset-open">重新开始这门课</button><div class="reset-confirm" id="reset-confirm" hidden>将清除本课的阅读位置、已读标记和自检选择。<div><button class="plain" id="reset-do">确认重新开始</button><button class="plain" id="reset-cancel">取消</button></div></div><p class="prototype-note">Teacher 阅读器交互原型 · 教学示例</p></div></div></dialog>
+<div class="notice" id="notice" hidden role="status"><span id="notice-text"></span><button id="notice-close" aria-label="关闭提示">×</button></div>
+<!-- teacher-pele-cache:start -->
+<script id="teacher-pele-cache-data" type="application/json">{"captions":{"all":"从查询开始，先检查副本。沿“没有副本”走一遍，再沿“有副本”走一遍，比较哪一步被省掉。","miss":"第一次查询：缓存里还没有 book:42。读取书籍、保存副本，再返回结果。","hit":"第二次查询：第一次已经留下 book:42。直接返回副本，没有再次调用 findBook。"},"source":{"wide":"flowchart TB\naccTitle: 同一个问题，两条缓存路径\naccDescr: 从查询开始，先检查副本。未命中时读取、保存后返回，命中时直接返回。仅展示顺序查询，假设副本仍然可用。\nquery[\"1 查询书籍 42\"]\ncache{\"2 有副本吗？\"}\nload[\"3 读取书籍\u003cbr/>findBook\"]\nsave[\"4 保存副本\"]\nresult[\"5 返回结果\"]\nhit[\"3 直接返回副本\"]\nquery --> cache\ncache -->|没有副本| load\nload --> save\nsave --> result\ncache -->|有副本| hit","narrow":"flowchart TB\naccTitle: 同一个问题，两条缓存路径\naccDescr: 从查询开始，先检查副本。未命中时读取、保存后返回，命中时直接返回。仅展示顺序查询，假设副本仍然可用。\nquery[\"1 查询书籍 42\"]\ncache{\"2 有副本吗？\"}\nload[\"3 读取书籍\u003cbr/>findBook\"]\nsave[\"4 保存副本\"]\nresult[\"5 返回结果\"]\nhit[\"3 直接返回副本\"]\nquery --> cache\ncache -->|没有副本| load\nload --> save\nsave --> result\ncache -->|有副本| hit"},"layouts":{"read":{"wide":"\u003csvg data-teacher-renderer=\"pele\" data-pele-version=\"1.9.0\" data-teacher-width=\"700\" xmlns=\"http://www.w3.org/2000/svg\" class=\"pele pele-flowchart diagram-wide\" viewBox=\"0 0 315 544\" width=\"315\" height=\"544\" style=\"max-width:100%;height:auto;--_bg:var(--pele-bg,#fff);--_fg:var(--pele-fg,#1f1f1f);--_m:var(--pele-muted,#6e6e6e);--_l:var(--pele-line,#1f1f1f);--_s:var(--pele-surface,#f3f3f3);--_a:var(--pele-surface-alt,#e6e6e6);--_b:var(--pele-border,#8a8a8a);--_c:var(--pele-accent,#5b7bd5);color:var(--_fg);--_r:var(--pele-radius,4px);--_fm:var(--pele-font-mono,Menlo, Consolas, monospace);font:16px sans-serif;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;font-family:var(--pele-font,PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, system-ui, sans-serif)\" fill=\"var(--_fg)\" role=\"graphics-document document\" aria-roledescription=\"flowchart\" aria-labelledby=\"teacher-course-read-wide-title\" aria-describedby=\"teacher-course-read-wide-desc\">\u003cmetadata>Generated by Pele 1.9.0, kepano / Obsidian, MIT; https://github.com/obsidianmd/pele. Teaching projection, not a verified runtime trace.\u003c/metadata>\u003cstyle>.pele {\n  --pele-bg: var(--reader-surface, #faf9f5);\n  --pele-fg: var(--reader-ink, #141413);\n  --pele-muted: var(--reader-muted, #5b5953);\n  --pele-line: var(--reader-figure-line, #68655b);\n  --pele-surface: var(--reader-surface, #faf9f5);\n  --pele-surface-alt: var(--reader-surface-alt, #eeece3);\n  --pele-border: var(--reader-figure-border, #8b877a);\n  --pele-accent: var(--reader-accent, #1b365d);\n  --pele-error: var(--reader-bad, #8a3b42);\n  --pele-font: PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, system-ui, sans-serif;\n  --pele-font-mono: Menlo, Consolas, monospace;\n}\u003c/style>\u003ctitle id=\"teacher-course-read-wide-title\">同一个问题，两条缓存路径\u003c/title>\u003cdesc id=\"teacher-course-read-wide-desc\">从查询开始，先检查副本。未命中时读取、保存后返回，命中时直接返回。仅展示顺序查询，假设副本仍然可用。\u003c/desc>\u003cg class=\"pele-edges\" fill=\"none\" stroke=\"var(--_l)\" stroke-linecap=\"round\">\u003cg class=\"pele-edge\" data-id=\"L_query_cache_0\" data-teacher-part=\"shared\">\u003cpath d=\"M149.34,56L149.34,97\"/>\u003cpath class=\"pele-marker\" d=\"M149.34,104L145.98,96L152.7,96Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003cg class=\"pele-edge\" data-id=\"L_cache_load_0\" data-teacher-part=\"miss\">\u003cpath d=\"M141.18,199.24C141.18,212.04 64.67,212.04 64.67,224.84L64.67,270.34\"/>\u003cpath class=\"pele-marker\" d=\"M64.67,277.34L61.31,269.34L68.03,269.34Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003cg class=\"pele-edge\" data-id=\"L_load_save_0\" data-teacher-part=\"miss\">\u003cpath d=\"M64.67,343.34L64.67,384.34\"/>\u003cpath class=\"pele-marker\" d=\"M64.67,391.34L61.31,383.34L68.03,383.34Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003cg class=\"pele-edge\" data-id=\"L_save_result_0\" data-teacher-part=\"miss\">\u003cpath d=\"M64.67,439.34L64.67,480.34\"/>\u003cpath class=\"pele-marker\" d=\"M64.67,487.34L61.31,479.34L68.03,479.34Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003cg class=\"pele-edge\" data-id=\"L_cache_hit_0\" data-teacher-part=\"hit\">\u003cpath d=\"M157.51,199.24C157.51,212.04 234.02,212.04 234.02,224.84L234.02,279.34\"/>\u003cpath class=\"pele-marker\" d=\"M234.02,286.34L230.66,278.34L237.38,278.34Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003c/g>\u003cg class=\"pele-edge-labels\" font-size=\"14\">\u003cg class=\"pele-edge-label\" data-id=\"L_cache_load_0\" data-teacher-part=\"miss\">\u003crect x=\"32.67\" y=\"226.84\" width=\"64\" height=\"21\" rx=\"3\" fill=\"var(--_bg)\"/>\u003ctext x=\"64.67\" y=\"242.24\" text-anchor=\"middle\">没有副本\u003c/text>\u003c/g>\u003cg class=\"pele-edge-label\" data-id=\"L_cache_hit_0\" data-teacher-part=\"hit\">\u003crect x=\"209.02\" y=\"226.84\" width=\"50\" height=\"21\" rx=\"3\" fill=\"var(--_bg)\"/>\u003ctext x=\"234.02\" y=\"242.24\" text-anchor=\"middle\">有副本\u003c/text>\u003c/g>\u003c/g>\u003cg class=\"pele-nodes\">\u003cg class=\"pele-node pele-shape-rect\" data-id=\"query\" transform=\"translate(149.34,32)\" data-teacher-part=\"shared\">\u003crect x=\"-67.79\" y=\"-24\" width=\"135.58\" height=\"48\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">1 查询书籍 42\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-diam\" data-id=\"cache\" transform=\"translate(149.34,154.17)\" data-teacher-part=\"shared\">\u003cpolygon points=\"0,-50.17 80.27,0 0,50.17 -80.27,0\" fill=\"var(--_s)\" stroke=\"var(--_b)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">2 有副本吗？\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-rect\" data-id=\"load\" transform=\"translate(64.67,310.34)\" data-teacher-part=\"miss\">\u003crect x=\"-56.67\" y=\"-33\" width=\"113.34\" height=\"66\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" text-anchor=\"middle\" xml:space=\"preserve\">\u003ctspan x=\"0\" y=\"-4.9\">3 读取书籍\u003c/tspan>\u003ctspan x=\"0\" y=\"16.1\">findBook\u003c/tspan>\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-rect\" data-id=\"save\" transform=\"translate(64.67,415.34)\" data-teacher-part=\"miss\">\u003crect x=\"-56.67\" y=\"-24\" width=\"113.34\" height=\"48\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">4 保存副本\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-rect\" data-id=\"result\" transform=\"translate(64.67,511.34)\" data-teacher-part=\"miss\">\u003crect x=\"-56.67\" y=\"-24\" width=\"113.34\" height=\"48\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">5 返回结果\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-rect\" data-id=\"hit\" transform=\"translate(234.02,310.34)\" data-teacher-part=\"hit\">\u003crect x=\"-72.67\" y=\"-24\" width=\"145.34\" height=\"48\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">3 直接返回副本\u003c/text>\u003c/g>\u003c/g>\u003c/svg>","narrow":"\u003csvg data-teacher-renderer=\"pele\" data-pele-version=\"1.9.0\" data-teacher-width=\"300\" xmlns=\"http://www.w3.org/2000/svg\" class=\"pele pele-flowchart diagram-narrow\" viewBox=\"0 0 295 496\" width=\"295\" height=\"496\" style=\"max-width:100%;height:auto;--_bg:var(--pele-bg,#fff);--_fg:var(--pele-fg,#1f1f1f);--_m:var(--pele-muted,#6e6e6e);--_l:var(--pele-line,#1f1f1f);--_s:var(--pele-surface,#f3f3f3);--_a:var(--pele-surface-alt,#e6e6e6);--_b:var(--pele-border,#8a8a8a);--_c:var(--pele-accent,#5b7bd5);color:var(--_fg);--_r:var(--pele-radius,4px);--_fm:var(--pele-font-mono,Menlo, Consolas, monospace);font:16px sans-serif;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;font-family:var(--pele-font,PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, system-ui, sans-serif)\" fill=\"var(--_fg)\" role=\"graphics-document document\" aria-roledescription=\"flowchart\" aria-labelledby=\"teacher-course-read-narrow-title\" aria-describedby=\"teacher-course-read-narrow-desc\">\u003cmetadata>Generated by Pele 1.9.0, kepano / Obsidian, MIT; https://github.com/obsidianmd/pele. Teaching projection, not a verified runtime trace.\u003c/metadata>\u003cstyle>.pele {\n  --pele-bg: var(--reader-surface, #faf9f5);\n  --pele-fg: var(--reader-ink, #141413);\n  --pele-muted: var(--reader-muted, #5b5953);\n  --pele-line: var(--reader-figure-line, #68655b);\n  --pele-surface: var(--reader-surface, #faf9f5);\n  --pele-surface-alt: var(--reader-surface-alt, #eeece3);\n  --pele-border: var(--reader-figure-border, #8b877a);\n  --pele-accent: var(--reader-accent, #1b365d);\n  --pele-error: var(--reader-bad, #8a3b42);\n  --pele-font: PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, system-ui, sans-serif;\n  --pele-font-mono: Menlo, Consolas, monospace;\n}\u003c/style>\u003ctitle id=\"teacher-course-read-narrow-title\">同一个问题，两条缓存路径\u003c/title>\u003cdesc id=\"teacher-course-read-narrow-desc\">从查询开始，先检查副本。未命中时读取、保存后返回，命中时直接返回。仅展示顺序查询，假设副本仍然可用。\u003c/desc>\u003cg class=\"pele-edges\" fill=\"none\" stroke=\"var(--_l)\" stroke-linecap=\"round\">\u003cg class=\"pele-edge\" data-id=\"L_query_cache_0\" data-teacher-part=\"shared\">\u003cpath d=\"M139.34,56L139.34,85\"/>\u003cpath class=\"pele-marker\" d=\"M139.34,92L135.98,84L142.7,84Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003cg class=\"pele-edge\" data-id=\"L_cache_load_0\" data-teacher-part=\"miss\">\u003cpath d=\"M131.18,187.24C131.18,197.04 64.67,197.04 64.67,206.84L64.67,246.34\"/>\u003cpath class=\"pele-marker\" d=\"M64.67,253.34L61.31,245.34L68.03,245.34Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003cg class=\"pele-edge\" data-id=\"L_load_save_0\" data-teacher-part=\"miss\">\u003cpath d=\"M64.67,319.34L64.67,348.34\"/>\u003cpath class=\"pele-marker\" d=\"M64.67,355.34L61.31,347.34L68.03,347.34Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003cg class=\"pele-edge\" data-id=\"L_save_result_0\" data-teacher-part=\"miss\">\u003cpath d=\"M64.67,403.34L64.67,432.34\"/>\u003cpath class=\"pele-marker\" d=\"M64.67,439.34L61.31,431.34L68.03,431.34Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003cg class=\"pele-edge\" data-id=\"L_cache_hit_0\" data-teacher-part=\"hit\">\u003cpath d=\"M147.51,187.24C147.51,197.04 214.02,197.04 214.02,206.84L214.02,255.34\"/>\u003cpath class=\"pele-marker\" d=\"M214.02,262.34L210.66,254.34L217.38,254.34Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003c/g>\u003cg class=\"pele-edge-labels\" font-size=\"14\">\u003cg class=\"pele-edge-label\" data-id=\"L_cache_load_0\" data-teacher-part=\"miss\">\u003crect x=\"32.67\" y=\"208.84\" width=\"64\" height=\"21\" rx=\"3\" fill=\"var(--_bg)\"/>\u003ctext x=\"64.67\" y=\"224.24\" text-anchor=\"middle\">没有副本\u003c/text>\u003c/g>\u003cg class=\"pele-edge-label\" data-id=\"L_cache_hit_0\" data-teacher-part=\"hit\">\u003crect x=\"189.02\" y=\"208.84\" width=\"50\" height=\"21\" rx=\"3\" fill=\"var(--_bg)\"/>\u003ctext x=\"214.02\" y=\"224.24\" text-anchor=\"middle\">有副本\u003c/text>\u003c/g>\u003c/g>\u003cg class=\"pele-nodes\">\u003cg class=\"pele-node pele-shape-rect\" data-id=\"query\" transform=\"translate(139.34,32)\" data-teacher-part=\"shared\">\u003crect x=\"-67.79\" y=\"-24\" width=\"135.58\" height=\"48\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">1 查询书籍 42\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-diam\" data-id=\"cache\" transform=\"translate(139.34,142.17)\" data-teacher-part=\"shared\">\u003cpolygon points=\"0,-50.17 80.27,0 0,50.17 -80.27,0\" fill=\"var(--_s)\" stroke=\"var(--_b)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">2 有副本吗？\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-rect\" data-id=\"load\" transform=\"translate(64.67,286.34)\" data-teacher-part=\"miss\">\u003crect x=\"-56.67\" y=\"-33\" width=\"113.34\" height=\"66\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" text-anchor=\"middle\" xml:space=\"preserve\">\u003ctspan x=\"0\" y=\"-4.9\">3 读取书籍\u003c/tspan>\u003ctspan x=\"0\" y=\"16.1\">findBook\u003c/tspan>\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-rect\" data-id=\"save\" transform=\"translate(64.67,379.34)\" data-teacher-part=\"miss\">\u003crect x=\"-56.67\" y=\"-24\" width=\"113.34\" height=\"48\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">4 保存副本\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-rect\" data-id=\"result\" transform=\"translate(64.67,463.34)\" data-teacher-part=\"miss\">\u003crect x=\"-56.67\" y=\"-24\" width=\"113.34\" height=\"48\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">5 返回结果\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-rect\" data-id=\"hit\" transform=\"translate(214.02,286.34)\" data-teacher-part=\"hit\">\u003crect x=\"-72.67\" y=\"-24\" width=\"145.34\" height=\"48\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">3 直接返回副本\u003c/text>\u003c/g>\u003c/g>\u003c/svg>"},"compare":{"wide":"\u003csvg data-teacher-renderer=\"pele\" data-pele-version=\"1.9.0\" data-teacher-width=\"700\" xmlns=\"http://www.w3.org/2000/svg\" class=\"pele pele-flowchart diagram-wide\" viewBox=\"0 0 315 544\" width=\"315\" height=\"544\" style=\"max-width:100%;height:auto;--_bg:var(--pele-bg,#fff);--_fg:var(--pele-fg,#1f1f1f);--_m:var(--pele-muted,#6e6e6e);--_l:var(--pele-line,#1f1f1f);--_s:var(--pele-surface,#f3f3f3);--_a:var(--pele-surface-alt,#e6e6e6);--_b:var(--pele-border,#8a8a8a);--_c:var(--pele-accent,#5b7bd5);color:var(--_fg);--_r:var(--pele-radius,4px);--_fm:var(--pele-font-mono,Menlo, Consolas, monospace);font:16px sans-serif;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;font-family:var(--pele-font,PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, system-ui, sans-serif)\" fill=\"var(--_fg)\" role=\"graphics-document document\" aria-roledescription=\"flowchart\" aria-labelledby=\"teacher-course-compare-wide-title\" aria-describedby=\"teacher-course-compare-wide-desc\">\u003cmetadata>Generated by Pele 1.9.0, kepano / Obsidian, MIT; https://github.com/obsidianmd/pele. Teaching projection, not a verified runtime trace.\u003c/metadata>\u003cstyle>.pele {\n  --pele-bg: var(--reader-surface, #faf9f5);\n  --pele-fg: var(--reader-ink, #141413);\n  --pele-muted: var(--reader-muted, #5b5953);\n  --pele-line: var(--reader-figure-line, #68655b);\n  --pele-surface: var(--reader-surface, #faf9f5);\n  --pele-surface-alt: var(--reader-surface-alt, #eeece3);\n  --pele-border: var(--reader-figure-border, #8b877a);\n  --pele-accent: var(--reader-accent, #1b365d);\n  --pele-error: var(--reader-bad, #8a3b42);\n  --pele-font: PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, system-ui, sans-serif;\n  --pele-font-mono: Menlo, Consolas, monospace;\n}\u003c/style>\u003ctitle id=\"teacher-course-compare-wide-title\">同一个问题，两条缓存路径\u003c/title>\u003cdesc id=\"teacher-course-compare-wide-desc\">从查询开始，先检查副本。未命中时读取、保存后返回，命中时直接返回。仅展示顺序查询，假设副本仍然可用。\u003c/desc>\u003cg class=\"pele-edges\" fill=\"none\" stroke=\"var(--_l)\" stroke-linecap=\"round\">\u003cg class=\"pele-edge\" data-id=\"L_query_cache_0\" data-teacher-part=\"shared\">\u003cpath d=\"M149.34,56L149.34,97\"/>\u003cpath class=\"pele-marker\" d=\"M149.34,104L145.98,96L152.7,96Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003cg class=\"pele-edge\" data-id=\"L_cache_load_0\" data-teacher-part=\"miss\">\u003cpath d=\"M141.18,199.24C141.18,212.04 64.67,212.04 64.67,224.84L64.67,270.34\"/>\u003cpath class=\"pele-marker\" d=\"M64.67,277.34L61.31,269.34L68.03,269.34Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003cg class=\"pele-edge\" data-id=\"L_load_save_0\" data-teacher-part=\"miss\">\u003cpath d=\"M64.67,343.34L64.67,384.34\"/>\u003cpath class=\"pele-marker\" d=\"M64.67,391.34L61.31,383.34L68.03,383.34Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003cg class=\"pele-edge\" data-id=\"L_save_result_0\" data-teacher-part=\"miss\">\u003cpath d=\"M64.67,439.34L64.67,480.34\"/>\u003cpath class=\"pele-marker\" d=\"M64.67,487.34L61.31,479.34L68.03,479.34Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003cg class=\"pele-edge\" data-id=\"L_cache_hit_0\" data-teacher-part=\"hit\">\u003cpath d=\"M157.51,199.24C157.51,212.04 234.02,212.04 234.02,224.84L234.02,279.34\"/>\u003cpath class=\"pele-marker\" d=\"M234.02,286.34L230.66,278.34L237.38,278.34Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003c/g>\u003cg class=\"pele-edge-labels\" font-size=\"14\">\u003cg class=\"pele-edge-label\" data-id=\"L_cache_load_0\" data-teacher-part=\"miss\">\u003crect x=\"32.67\" y=\"226.84\" width=\"64\" height=\"21\" rx=\"3\" fill=\"var(--_bg)\"/>\u003ctext x=\"64.67\" y=\"242.24\" text-anchor=\"middle\">没有副本\u003c/text>\u003c/g>\u003cg class=\"pele-edge-label\" data-id=\"L_cache_hit_0\" data-teacher-part=\"hit\">\u003crect x=\"209.02\" y=\"226.84\" width=\"50\" height=\"21\" rx=\"3\" fill=\"var(--_bg)\"/>\u003ctext x=\"234.02\" y=\"242.24\" text-anchor=\"middle\">有副本\u003c/text>\u003c/g>\u003c/g>\u003cg class=\"pele-nodes\">\u003cg class=\"pele-node pele-shape-rect\" data-id=\"query\" transform=\"translate(149.34,32)\" data-teacher-part=\"shared\">\u003crect x=\"-67.79\" y=\"-24\" width=\"135.58\" height=\"48\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">1 查询书籍 42\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-diam\" data-id=\"cache\" transform=\"translate(149.34,154.17)\" data-teacher-part=\"shared\">\u003cpolygon points=\"0,-50.17 80.27,0 0,50.17 -80.27,0\" fill=\"var(--_s)\" stroke=\"var(--_b)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">2 有副本吗？\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-rect\" data-id=\"load\" transform=\"translate(64.67,310.34)\" data-teacher-part=\"miss\">\u003crect x=\"-56.67\" y=\"-33\" width=\"113.34\" height=\"66\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" text-anchor=\"middle\" xml:space=\"preserve\">\u003ctspan x=\"0\" y=\"-4.9\">3 读取书籍\u003c/tspan>\u003ctspan x=\"0\" y=\"16.1\">findBook\u003c/tspan>\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-rect\" data-id=\"save\" transform=\"translate(64.67,415.34)\" data-teacher-part=\"miss\">\u003crect x=\"-56.67\" y=\"-24\" width=\"113.34\" height=\"48\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">4 保存副本\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-rect\" data-id=\"result\" transform=\"translate(64.67,511.34)\" data-teacher-part=\"miss\">\u003crect x=\"-56.67\" y=\"-24\" width=\"113.34\" height=\"48\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">5 返回结果\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-rect\" data-id=\"hit\" transform=\"translate(234.02,310.34)\" data-teacher-part=\"hit\">\u003crect x=\"-72.67\" y=\"-24\" width=\"145.34\" height=\"48\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">3 直接返回副本\u003c/text>\u003c/g>\u003c/g>\u003c/svg>","narrow":"\u003csvg data-teacher-renderer=\"pele\" data-pele-version=\"1.9.0\" data-teacher-width=\"300\" xmlns=\"http://www.w3.org/2000/svg\" class=\"pele pele-flowchart diagram-narrow\" viewBox=\"0 0 295 496\" width=\"295\" height=\"496\" style=\"max-width:100%;height:auto;--_bg:var(--pele-bg,#fff);--_fg:var(--pele-fg,#1f1f1f);--_m:var(--pele-muted,#6e6e6e);--_l:var(--pele-line,#1f1f1f);--_s:var(--pele-surface,#f3f3f3);--_a:var(--pele-surface-alt,#e6e6e6);--_b:var(--pele-border,#8a8a8a);--_c:var(--pele-accent,#5b7bd5);color:var(--_fg);--_r:var(--pele-radius,4px);--_fm:var(--pele-font-mono,Menlo, Consolas, monospace);font:16px sans-serif;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;font-family:var(--pele-font,PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, system-ui, sans-serif)\" fill=\"var(--_fg)\" role=\"graphics-document document\" aria-roledescription=\"flowchart\" aria-labelledby=\"teacher-course-compare-narrow-title\" aria-describedby=\"teacher-course-compare-narrow-desc\">\u003cmetadata>Generated by Pele 1.9.0, kepano / Obsidian, MIT; https://github.com/obsidianmd/pele. Teaching projection, not a verified runtime trace.\u003c/metadata>\u003cstyle>.pele {\n  --pele-bg: var(--reader-surface, #faf9f5);\n  --pele-fg: var(--reader-ink, #141413);\n  --pele-muted: var(--reader-muted, #5b5953);\n  --pele-line: var(--reader-figure-line, #68655b);\n  --pele-surface: var(--reader-surface, #faf9f5);\n  --pele-surface-alt: var(--reader-surface-alt, #eeece3);\n  --pele-border: var(--reader-figure-border, #8b877a);\n  --pele-accent: var(--reader-accent, #1b365d);\n  --pele-error: var(--reader-bad, #8a3b42);\n  --pele-font: PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, system-ui, sans-serif;\n  --pele-font-mono: Menlo, Consolas, monospace;\n}\u003c/style>\u003ctitle id=\"teacher-course-compare-narrow-title\">同一个问题，两条缓存路径\u003c/title>\u003cdesc id=\"teacher-course-compare-narrow-desc\">从查询开始，先检查副本。未命中时读取、保存后返回，命中时直接返回。仅展示顺序查询，假设副本仍然可用。\u003c/desc>\u003cg class=\"pele-edges\" fill=\"none\" stroke=\"var(--_l)\" stroke-linecap=\"round\">\u003cg class=\"pele-edge\" data-id=\"L_query_cache_0\" data-teacher-part=\"shared\">\u003cpath d=\"M139.34,56L139.34,85\"/>\u003cpath class=\"pele-marker\" d=\"M139.34,92L135.98,84L142.7,84Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003cg class=\"pele-edge\" data-id=\"L_cache_load_0\" data-teacher-part=\"miss\">\u003cpath d=\"M131.18,187.24C131.18,197.04 64.67,197.04 64.67,206.84L64.67,246.34\"/>\u003cpath class=\"pele-marker\" d=\"M64.67,253.34L61.31,245.34L68.03,245.34Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003cg class=\"pele-edge\" data-id=\"L_load_save_0\" data-teacher-part=\"miss\">\u003cpath d=\"M64.67,319.34L64.67,348.34\"/>\u003cpath class=\"pele-marker\" d=\"M64.67,355.34L61.31,347.34L68.03,347.34Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003cg class=\"pele-edge\" data-id=\"L_save_result_0\" data-teacher-part=\"miss\">\u003cpath d=\"M64.67,403.34L64.67,432.34\"/>\u003cpath class=\"pele-marker\" d=\"M64.67,439.34L61.31,431.34L68.03,431.34Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003cg class=\"pele-edge\" data-id=\"L_cache_hit_0\" data-teacher-part=\"hit\">\u003cpath d=\"M147.51,187.24C147.51,197.04 214.02,197.04 214.02,206.84L214.02,255.34\"/>\u003cpath class=\"pele-marker\" d=\"M214.02,262.34L210.66,254.34L217.38,254.34Z\" fill=\"var(--_l)\" stroke=\"none\"/>\u003c/g>\u003c/g>\u003cg class=\"pele-edge-labels\" font-size=\"14\">\u003cg class=\"pele-edge-label\" data-id=\"L_cache_load_0\" data-teacher-part=\"miss\">\u003crect x=\"32.67\" y=\"208.84\" width=\"64\" height=\"21\" rx=\"3\" fill=\"var(--_bg)\"/>\u003ctext x=\"64.67\" y=\"224.24\" text-anchor=\"middle\">没有副本\u003c/text>\u003c/g>\u003cg class=\"pele-edge-label\" data-id=\"L_cache_hit_0\" data-teacher-part=\"hit\">\u003crect x=\"189.02\" y=\"208.84\" width=\"50\" height=\"21\" rx=\"3\" fill=\"var(--_bg)\"/>\u003ctext x=\"214.02\" y=\"224.24\" text-anchor=\"middle\">有副本\u003c/text>\u003c/g>\u003c/g>\u003cg class=\"pele-nodes\">\u003cg class=\"pele-node pele-shape-rect\" data-id=\"query\" transform=\"translate(139.34,32)\" data-teacher-part=\"shared\">\u003crect x=\"-67.79\" y=\"-24\" width=\"135.58\" height=\"48\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">1 查询书籍 42\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-diam\" data-id=\"cache\" transform=\"translate(139.34,142.17)\" data-teacher-part=\"shared\">\u003cpolygon points=\"0,-50.17 80.27,0 0,50.17 -80.27,0\" fill=\"var(--_s)\" stroke=\"var(--_b)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">2 有副本吗？\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-rect\" data-id=\"load\" transform=\"translate(64.67,286.34)\" data-teacher-part=\"miss\">\u003crect x=\"-56.67\" y=\"-33\" width=\"113.34\" height=\"66\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" text-anchor=\"middle\" xml:space=\"preserve\">\u003ctspan x=\"0\" y=\"-4.9\">3 读取书籍\u003c/tspan>\u003ctspan x=\"0\" y=\"16.1\">findBook\u003c/tspan>\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-rect\" data-id=\"save\" transform=\"translate(64.67,379.34)\" data-teacher-part=\"miss\">\u003crect x=\"-56.67\" y=\"-24\" width=\"113.34\" height=\"48\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">4 保存副本\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-rect\" data-id=\"result\" transform=\"translate(64.67,463.34)\" data-teacher-part=\"miss\">\u003crect x=\"-56.67\" y=\"-24\" width=\"113.34\" height=\"48\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">5 返回结果\u003c/text>\u003c/g>\u003cg class=\"pele-node pele-shape-rect\" data-id=\"hit\" transform=\"translate(214.02,286.34)\" data-teacher-part=\"hit\">\u003crect x=\"-72.67\" y=\"-24\" width=\"145.34\" height=\"48\" fill=\"var(--_s)\" stroke=\"var(--_b)\" style=\"rx:var(--_r)\"/>\u003ctext class=\"pele-label\" x=\"0\" y=\"5.6\" text-anchor=\"middle\">3 直接返回副本\u003c/text>\u003c/g>\u003c/g>\u003c/svg>"}}}</script>
+<!-- teacher-pele-cache:end -->
+<!-- teacher-reader-appearance-data:start -->
+<script id="teacher-reader-theme-data" type="application/json">{"default":"paper","reference":"Kami design principles: warm paper, ink-blue accent, warm neutrals, serif reading typography; night is a Teacher adaptation.","fonts":{"reading":"TsangerJinKai02, Source Han Serif SC, Noto Serif CJK SC, Noto Serif SC, Songti SC, STSong, SimSun, Georgia, serif","ui":"PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, system-ui, sans-serif","mono":"JetBrains Mono, SF Mono, Menlo, Consolas, PingFang SC, monospace"},"themes":{"paper":{"name":"纸本","description":"暖纸与墨蓝，参考 Kami 的长文阅读风格。","scheme":"light","tokens":{"canvas":"#f5f4ed","surface":"#faf9f5","surfaceAlt":"#eeece3","ink":"#141413","muted":"#5b5953","line":"#d9d5c8","accent":"#1b365d","accentSoft":"#e4ecf5","figureLine":"#68655b","figureBorder":"#8b877a","codeKeyword":"#1b365d","codeString":"#535843","codeNumber":"#6e5140","good":"#315b45","goodSoft":"#e9f0e6","bad":"#8a3b42","badSoft":"#f6eaea"}},"white":{"name":"白纸","description":"更明净的纸面，保留墨蓝和暖灰层级。","scheme":"light","tokens":{"canvas":"#ffffff","surface":"#fafaf7","surfaceAlt":"#f0efe9","ink":"#181816","muted":"#5c5b55","line":"#dedbd2","accent":"#243f63","accentSoft":"#e8eef6","figureLine":"#68665e","figureBorder":"#89867c","codeKeyword":"#243f63","codeString":"#505943","codeNumber":"#6e5140","good":"#315b45","goodSoft":"#edf3e9","bad":"#8a3b42","badSoft":"#f9eded"}},"night":{"name":"夜读","description":"Teacher 的暖炭夜读适配，减轻亮屏感并保留对比度。","scheme":"dark","tokens":{"canvas":"#1c1c1a","surface":"#242420","surfaceAlt":"#30302a","ink":"#ece8df","muted":"#bab5aa","line":"#49483f","accent":"#a8c5e5","accentSoft":"#293545","figureLine":"#b2ada1","figureBorder":"#939082","codeKeyword":"#b5cdec","codeString":"#c2ccac","codeNumber":"#d8bfa6","good":"#b6d0b0","goodSoft":"#29362a","bad":"#e2b0b4","badSoft":"#3c292d"}}}}</script>
+<dialog id="reader-settings" class="reader-settings-dialog" aria-labelledby="reader-settings-title"><div class="reader-settings-head"><h2 id="reader-settings-title">阅读设置</h2><button type="button" class="reader-settings-close" data-reader-settings-close aria-label="关闭阅读设置">×</button></div><p>选择适合此刻的纸面。课程内容、阅读位置和已答问题会保持不变。</p><fieldset><legend>纸面主题</legend><label class="reader-theme-choice"><input type="radio" name="teacher-reader-theme" value="paper" data-reader-theme-choice><span><strong>纸本</strong><small>暖纸与墨蓝，参考 Kami 的长文阅读风格。</small></span><span class="reader-theme-swatch" aria-hidden="true" style="background:#f5f4ed;color:#141413">阅</span></label><label class="reader-theme-choice"><input type="radio" name="teacher-reader-theme" value="white" data-reader-theme-choice><span><strong>白纸</strong><small>更明净的纸面，保留墨蓝和暖灰层级。</small></span><span class="reader-theme-swatch" aria-hidden="true" style="background:#ffffff;color:#181816">阅</span></label><label class="reader-theme-choice"><input type="radio" name="teacher-reader-theme" value="night" data-reader-theme-choice><span><strong>夜读</strong><small>Teacher 的暖炭夜读适配，减轻亮屏感并保留对比度。</small></span><span class="reader-theme-swatch" aria-hidden="true" style="background:#1c1c1a;color:#ece8df">阅</span></label></fieldset><p class="reader-settings-status" id="reader-settings-status" role="status">外观设置独立于学习进度保存在当前浏览器。</p></dialog>
+<!-- teacher-reader-appearance-data:end -->
+<!-- teacher-motion-data:start -->
+<script id="teacher-motion-data" type="application/json">{"specs":{"cache-miss":{"key":"cache-miss","title":"第一次：未命中路径","mode":"request","frames":[{"node":"query","edge":null,"text":"查询书籍 42。"},{"node":"cache","edge":"L_query_cache_0","text":"有副本吗？"},{"node":"load","edge":"L_cache_load_0","text":"没有副本：读取书籍 · findBook。"},{"node":"save","edge":"L_load_save_0","text":"保存副本。"},{"node":"result","edge":"L_save_result_0","text":"返回结果。"}],"teachingOnly":true},"cache-hit":{"key":"cache-hit","title":"第二次：命中路径","mode":"request","frames":[{"node":"query","edge":null,"text":"查询书籍 42。"},{"node":"cache","edge":"L_query_cache_0","text":"有副本吗？"},{"node":"hit","edge":"L_cache_hit_0","text":"有副本：直接返回副本。"}],"teachingOnly":true}}}</script>
+<!-- teacher-motion-data:end -->
+<script>
+"use strict";
+/* teacher-motion-runtime:start */
+function initializeTeacherPlayback(context) {
+  const data = JSON.parse(document.getElementById('teacher-motion-data').textContent);
+  const positions = new Map(), reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let active = null, revision = 0;
+  function descriptor() {
+    if (context === 'course') return data.specs[diagramPath === 'hit' ? 'cache-hit' : 'cache-miss'] || null;
+    if (currentComponent !== 'visual') return null;
+    const focus = effectiveVisualFocus();
+    const key = currentCase === 1 ? (focus === 'failure' ? 'flow-failure' : focus === 'success' ? 'flow-hit' : 'flow-miss') : currentCase === 3 ? (focus === 'retry' ? 'state-retry' : focus === 'done' ? 'state-stop' : 'state-complete') : currentCase === 5 ? 'algorithm' : null;
+    return key ? data.specs[key] || null : null;
+  }
+  function position(spec) {
+    if (!positions.has(spec.key)) positions.set(spec.key, { frame: spec.mode === 'algorithm' ? visualStep : 0 });
+    const state = positions.get(spec.key);
+    if (spec.mode === 'algorithm' && state.frame !== visualStep) state.frame = visualStep;
+    state.frame = Math.max(0, Math.min(spec.frames.length - 1, state.frame));
+    return state;
+  }
+  function regionFor(element) { return element.closest('[data-teacher-motion]'); }
+  function figures(region) {
+    const owner = region.closest('[data-cache-figure]') || region.closest('.sample-body');
+    return owner ? Array.from(owner.querySelectorAll('svg[data-teacher-renderer="pele"]')) : [];
+  }
+  function matching(svg, id) { return id ? Array.from(svg.querySelectorAll('[data-id="' + id + '"]')) : []; }
+  function clearToken() { document.querySelectorAll('.teacher-request-token').forEach(token => token.remove()); }
+  function cancel(snap) {
+    revision += 1;
+    if (!active) { if (snap) clearToken(); return; }
+    clearTimeout(active.timer); cancelAnimationFrame(active.raf); active.timer = 0; active.raf = 0; active.playing = false;
+    if (snap) { active.progress = 0; clearToken(); active = null; }
+  }
+  function stableFrame(spec, frame) {
+    position(spec).frame = frame;
+    if (spec.mode === 'algorithm' && context === 'workbench') { visualStep = frame; refreshVisual(); }
+  }
+  function sync() {
+    if (active && !active.owner.isConnected) cancel(true);
+    const spec = descriptor();
+    if (!spec) return;
+    if (context === 'workbench' && spec.mode === 'algorithm') document.querySelector('.viz-takeaway')?.removeAttribute('aria-live');
+    const state = position(spec), frame = spec.frames[state.frame];
+    document.querySelectorAll('[data-teacher-motion]').forEach(region => {
+      region.dataset.demoKey = spec.key;
+      const playing = Boolean(active && active.owner === region && active.playing), pausedTravel = Boolean(active && active.owner === region && active.progress > 0);
+      region.querySelector('[data-motion-title]').textContent = spec.title;
+      region.querySelector('[data-motion-count]').textContent = (state.frame + 1) + ' / ' + spec.frames.length;
+      const previous = region.querySelector('[data-motion-action="previous"]'), next = region.querySelector('[data-motion-action="next"]');
+      previous.disabled = state.frame === 0; next.disabled = state.frame === spec.frames.length - 1;
+      previous.setAttribute('aria-label', spec.mode === 'algorithm' ? '上一个观察位置' : '演示上一步');
+      next.setAttribute('aria-label', spec.mode === 'algorithm' ? '下一个观察位置' : '演示下一步');
+      const play = region.querySelector('[data-motion-action="play"]');
+      play.disabled = reduced.matches; play.setAttribute('aria-pressed', String(playing));
+      play.textContent = reduced.matches ? '逐步查看' : playing ? '暂停' : pausedTravel ? '继续播放' : state.frame === spec.frames.length - 1 ? '重新播放' : '播放演示';
+      region.querySelector('[data-motion-caption]').textContent = frame.text + (playing && active.progress > 0 ? '（正沿声明的路径进入下一步）' : '');
+      region.querySelector('[data-motion-note]').textContent = reduced.matches ? '已遵循减少动态效果偏好，请使用上一步 / 下一步。' : '教学演示，不执行源码；播放速度不代表实际耗时。';
+      figures(region).forEach(svg => {
+        svg.querySelectorAll('.teacher-demo-current,.teacher-demo-edge').forEach(element => element.classList.remove('teacher-demo-current', 'teacher-demo-edge'));
+        matching(svg, frame.node).forEach(element => element.classList.add('teacher-demo-current'));
+        matching(svg, frame.edge).forEach(element => element.classList.add('teacher-demo-edge'));
+      });
+    });
+  }
+  function visibleFigures(owner, spec) {
+    const visible = figures(owner).filter(svg => svg.getBoundingClientRect().width > 0 && svg.getBoundingClientRect().height > 0);
+    visible.sort((a, b) => spec.frames.filter(frame => matching(b, frame.node).length).length - spec.frames.filter(frame => matching(a, frame.node).length).length);
+    return visible;
+  }
+  function watchable(owner, spec) {
+    // One deliberate response to Play, never a per-frame scroll.
+    const svg = visibleFigures(owner, spec)[0];
+    if (!svg) return;
+    let container = owner.parentElement;
+    while (container && container !== document.body) {
+      if (/(auto|scroll)/.test(getComputedStyle(container).overflowY) && container.scrollHeight > container.clientHeight) break;
+      container = container.parentElement;
+    }
+    const page = !container || container === document.body;
+    if (page) container = document.scrollingElement || document.documentElement;
+    const viewport = page ? { top: 0, bottom: window.innerHeight } : container.getBoundingClientRect();
+    const toolbar = owner.getBoundingClientRect(), graphic = svg.getBoundingClientRect();
+    const top = Math.min(toolbar.top, graphic.top), bottom = Math.max(toolbar.bottom, graphic.bottom), room = viewport.bottom - viewport.top - 16;
+    const target = bottom - top <= room ? viewport.top + 8 + (room - (bottom - top)) / 2 : viewport.top + 8;
+    container.scrollTop += (bottom - top <= room ? top : toolbar.top) - target;
+  }
+  function pathFor(owner, spec, edge) {
+    const visible = visibleFigures(owner, spec);
+    for (const svg of visible) for (const element of matching(svg, edge)) {
+      const path = element.tagName.toLowerCase() === 'path' ? element : element.querySelector('path[d]');
+      if (path && typeof path.getTotalLength === 'function' && path.getTotalLength() > 0) return { svg, path };
+    }
+    return null;
+  }
+  function schedule(entry, delay) {
+    const stamp = revision;
+    entry.timer = setTimeout(() => { entry.timer = 0; if (active === entry && entry.playing && stamp === revision && entry.owner.isConnected) advance(entry); }, delay);
+  }
+  function advance(entry) {
+    const spec = entry.spec, state = position(spec), stamp = revision;
+    if (!entry.playing || active !== entry || reduced.matches || state.frame >= spec.frames.length - 1) { cancel(true); sync(); return; }
+    const next = spec.frames[state.frame + 1], geometry = spec.mode === 'request' && next.edge ? pathFor(entry.owner, spec, next.edge) : null;
+    if (!geometry) {
+      stableFrame(spec, state.frame + 1); entry.progress = 0; sync();
+      if (state.frame >= spec.frames.length - 1) { cancel(true); sync(); } else schedule(entry, 1000);
+      return;
+    }
+    clearToken();
+    const token = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    token.setAttribute('class', 'teacher-request-token'); token.setAttribute('r', '5'); token.setAttribute('aria-hidden', 'true');
+    if (geometry.path.getAttribute('transform')) token.setAttribute('transform', geometry.path.getAttribute('transform'));
+    geometry.path.parentElement.appendChild(token);
+    matching(geometry.svg, next.edge).forEach(element => element.classList.add('teacher-demo-edge'));
+    const length = geometry.path.getTotalLength(), duration = 1100, start = performance.now() - entry.progress * duration;
+    const tick = time => {
+      if (active !== entry || !entry.playing || stamp !== revision || !entry.owner.isConnected) return;
+      entry.progress = Math.min(1, Math.max(0, (time - start) / duration));
+      const point = geometry.path.getPointAtLength(length * entry.progress);
+      token.setAttribute('cx', String(point.x)); token.setAttribute('cy', String(point.y));
+      if (entry.progress < 1) { entry.raf = requestAnimationFrame(tick); return; }
+      entry.raf = 0; token.remove(); entry.progress = 0; stableFrame(spec, state.frame + 1); sync();
+      if (state.frame >= spec.frames.length - 1) { cancel(true); sync(); } else schedule(entry, 650);
+    };
+    entry.raf = requestAnimationFrame(tick);
+  }
+  function play(owner) {
+    const spec = descriptor(); if (!spec || reduced.matches) return;
+    if (active && active.owner === owner && active.spec.key === spec.key && active.playing) { cancel(false); sync(); return; }
+    const same = active && active.owner === owner && active.spec.key === spec.key;
+    if (!same) { cancel(true); active = { owner, spec, playing: false, progress: 0, timer: 0, raf: 0 }; }
+    const state = position(spec);
+    if (state.frame === spec.frames.length - 1) { stableFrame(spec, 0); active.progress = 0; }
+    watchable(owner, spec);
+    active.playing = true; sync();
+    if (spec.mode === 'request') advance(active); else schedule(active, 1000);
+  }
+  window.teacherMotionControls = function (prefix) {
+    const spec = descriptor(); if (!spec) return '';
+    const state = position(spec), id = 'teacher-demo-' + prefix + '-' + spec.key;
+    return '<section class="teacher-motion" data-teacher-motion aria-labelledby="' + id + '-title"><div class="teacher-motion-heading"><strong id="' + id + '-title" data-motion-title>' + spec.title + '</strong><span class="teacher-motion-count" data-motion-count>' + (state.frame + 1) + ' / ' + spec.frames.length + '</span></div><div class="teacher-motion-actions" role="group" aria-label="教学演示控制"><button type="button" data-motion-action="previous" aria-label="演示上一步">上一步</button><button type="button" data-motion-action="play" aria-pressed="false">播放演示</button><button type="button" data-motion-action="next" aria-label="演示下一步">下一步</button><button type="button" data-motion-action="reset" aria-label="重置教学演示">重置</button></div><p class="teacher-motion-caption" data-motion-caption role="status" aria-live="polite">' + spec.frames[state.frame].text + '</p><p class="teacher-motion-note" data-motion-note>教学演示，不执行源码；播放速度不代表实际耗时。</p></section>';
+  };
+  window.teacherSyncMotion = sync;
+  window.teacherPauseMotion = function () { cancel(true); sync(); };
+  document.addEventListener('click', event => {
+    const target = event.target instanceof Element ? event.target : null; if (!target) return;
+    const action = target.closest('[data-motion-action]');
+    if (action) {
+      const owner = regionFor(action), spec = descriptor(); if (!owner || !spec) return;
+      if (action.dataset.motionAction === 'play') { play(owner); return; }
+      cancel(true); const state = position(spec);
+      stableFrame(spec, action.dataset.motionAction === 'reset' ? 0 : Math.max(0, Math.min(spec.frames.length - 1, state.frame + (action.dataset.motionAction === 'next' ? 1 : -1))));
+      sync(); return;
+    }
+    if (target.closest('[data-component],[data-case],[data-vfocus],[data-vstep],[data-diagram-path],[data-step],#previous,#next,#reset-do,#reset-confirm-button')) { cancel(true); positions.clear(); }
+    else if (target.closest('[data-anchor],#return-reader,[data-source-anchor],[data-file],#source-back,#source-forward,#source-home')) cancel(true);
+  }, true);
+  document.addEventListener('change', event => { if (event.target.id === 'mobile-nav') { cancel(true); positions.clear(); } }, true);
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && context === 'course' && sourceOpen && !document.getElementById('reader-settings')?.open && !document.getElementById('outline')?.open) { cancel(true); sync(); }
+  }, true);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') { cancel(true); sync(); } });
+  window.addEventListener('pagehide', () => cancel(true));
+  window.addEventListener('resize', () => { cancel(true); sync(); });
+  const reduceChanged = () => { if (reduced.matches) cancel(true); sync(); };
+  if (reduced.addEventListener) reduced.addEventListener('change', reduceChanged);
+  else if (reduced.addListener) reduced.addListener(reduceChanged);
+}
+initializeTeacherPlayback("course");
+/* teacher-motion-runtime:end */
+/* teacher-reader-appearance:start */
+function initializeReaderAppearance() {
+  const config = JSON.parse(document.getElementById('teacher-reader-theme-data').textContent);
+  const key = 'teacher-reader.appearance.v1', root = document.documentElement, dialog = document.getElementById('reader-settings');
+  const choiceSelector = 'input[type="radio"][name="teacher-reader-theme"][data-reader-theme-choice]';
+  let chosen = config.default, opener = null;
+  try { const saved = JSON.parse(localStorage.getItem(key) || 'null'); if (saved && Object.hasOwn(config.themes, saved.theme)) chosen = saved.theme; } catch (error) {}
+  function apply(id, persist) {
+    if (!Object.hasOwn(config.themes, id)) return;
+    chosen = id; root.dataset.readerTheme = id; root.style.colorScheme = config.themes[id].scheme;
+    dialog.querySelectorAll(choiceSelector).forEach(input => { input.checked = input.value === id; });
+    if (persist) {
+      try { localStorage.setItem(key, JSON.stringify({ theme: id })); document.getElementById('reader-settings-status').textContent = '已保存外观设置，学习位置保持不变。'; }
+      catch (error) { document.getElementById('reader-settings-status').textContent = '主题仅在本次打开中生效；浏览器未允许保存设置。'; }
+    }
+  }
+  function close() { dialog.close(); if (opener && opener.isConnected) opener.focus({ preventScroll: true }); }
+  apply(chosen, false);
+  document.addEventListener('click', event => {
+    const target = event.target instanceof Element ? event.target : null;
+    if (!target) return;
+    const trigger = target.closest('[data-reader-settings]');
+    if (trigger) { opener = trigger; dialog.showModal(); return; }
+    if (target.closest('[data-reader-settings-close]')) close();
+  });
+  dialog.addEventListener('change', event => {
+    const input = event.target;
+    if (input instanceof HTMLInputElement && dialog.contains(input) && input.matches(choiceSelector) && input.checked && Object.hasOwn(config.themes, input.value)) apply(input.value, true);
+  });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && dialog.open) { event.preventDefault(); event.stopImmediatePropagation(); close(); } }, true);
+}
+initializeReaderAppearance();
+/* teacher-reader-appearance:end */
+const FILES = {
+ "src/catalog.js": [
+  'import { getOrLoad } from "./cache.js";',
+  'import { findBook } from "./books.js";',
+  '',
+  'export async function getBook(id) {',
+  '  const key = "book:" + id;',
+  '  return getOrLoad(key, () => findBook(id));',
+  '}',
+  '',
+  'export async function demo() {',
+  '  const first = await getBook("42");',
+  '  const second = await getBook("42");',
+  '  return { first, second };',
+  '}'
+ ],
+ "src/cache.js": [
+  'const entries = new Map();',
+  '',
+  'export async function getOrLoad(key, load) {',
+  '  if (entries.has(key)) {',
+  '    return entries.get(key);',
+  '  }',
+  '',
+  '  const value = await load();',
+  '  entries.set(key, value);',
+  '  return value;',
+  '}',
+  '',
+  'export function clearCache() {',
+  '  entries.clear();',
+  '}'
+ ],
+ "src/books.js": [
+  'const books = new Map([',
+  '  ["42", { id: "42", title: "看见代码" }],',
+  '  ["17", { id: "17", title: "理解系统" }],',
+  ']);',
+  '',
+  'let reads = 0;',
+  '',
+  'export async function findBook(id) {',
+  '  reads += 1;',
+  '  const book = books.get(id);',
+  '  if (!book) throw new Error("Unknown book: " + id);',
+  '  return book;',
+  '}',
+  '',
+  'export function getReadCount() {',
+  '  return reads;',
+  '}'
+ ]
+};
+const ANCHORS = {
+ request:{file:"src/catalog.js",start:9,end:12,label:"同一本书，连续查询两次"},
+ catalog:{file:"src/catalog.js",start:4,end:7,label:"getBook：组织一次查询"},
+ cache:{file:"src/cache.js",start:3,end:10,label:"getOrLoad：先看缓存，再决定是否取数"},
+ miss:{file:"src/cache.js",start:8,end:10,label:"未命中：取数，保存，再返回"},
+ hit:{file:"src/cache.js",start:4,end:5,label:"命中：直接返回已有副本"},
+ books:{file:"src/books.js",start:8,end:12,label:"findBook：实际取得书籍数据"},
+ callback:{file:"src/catalog.js",start:6,end:6,label:"load 回调从这里传入"}
+};
+const STEPS = [
+ {title:"一个重复的问题",headline:"同一个问题，为什么还要从头找？",source:"request"},
+ {title:"先看有没有副本",headline:"先看有没有，再决定要不要找",source:"cache"},
+ {title:"沿着源码走一遍",headline:"第一次走远路，第二次走近路",source:"catalog"},
+ {title:"换一个问题试试",headline:"换一本书，你还能判断路径吗？",source:"cache"}
+];
+const KEY="teacher-reader.cache-course.v1";
+const $=function(id){return document.getElementById(id);};
+const esc=function(value){return String(value).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});};
+function fresh(){return {step:0,scrolls:{},read:[],answer:null,checked:false};}
+let storageOK=true,resume=false;
+function load(){
+ try{
+  const raw=localStorage.getItem(KEY);
+  if(!raw)return fresh();
+  const v=JSON.parse(raw),s=fresh();
+  if(!v||typeof v!=="object")return s;
+  s.step=Number.isInteger(v.step)&&v.step>=0&&v.step<4?v.step:0;
+  s.read=Array.isArray(v.read)?Array.from(new Set(v.read.filter(function(n){return Number.isInteger(n)&&n>=0&&n<4;}))):[];
+  if(v.scrolls&&typeof v.scrolls==="object")for(let i=0;i<4;i++){const n=Number(v.scrolls[i]);if(Number.isFinite(n)&&n>=0)s.scrolls[i]=n;}
+  s.answer=["wrong","load","forever"].includes(v.answer)?v.answer:null;
+  s.checked=Boolean(s.answer&&v.checked===true);
+  resume=s.step>0||(s.scrolls[s.step]||0)>35;
+  return s;
+ }catch(e){storageOK=false;return fresh();}
+}
+let state=load(),sourceOpen=false,returnPlace=null,current=null,past=[],future=[],homeAnchor=null,scrollTimer=0,noticeTimer=0,diagramPath="all",sourceWrap=false,comparisonTop=0,comparisonReady=false;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){storageOK=false;$("warning").hidden=false;}}
+function remember(){if(!sourceOpen)state.scrolls[state.step]=$("reader-scroll").scrollTop;}
+function sourceButton(prefix,id,anchor,label){
+ return '<button class="source-button" id="'+prefix+"-"+id+'" data-anchor="'+anchor+'"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 7-5 5 5 5m8-10 5 5-5 5m-3-13-2 16"/></svg><span>'+label+'</span><span aria-hidden="true">→</span></button>';
+}
+/* teacher-pele-course-runtime:start */
+const PELE_CACHE=JSON.parse(document.getElementById("teacher-pele-cache-data").textContent);
+function teacherFocusPele(markup, focus) {
+  if (markup.startsWith('<div')) {
+    const parsed = new DOMParser().parseFromString(markup, 'text/html');
+    parsed.body.querySelectorAll('svg').forEach(function (svg) {
+      svg.querySelectorAll('[data-teacher-part]').forEach(function (element) {
+        const part = element.getAttribute('data-teacher-part'), active = focus === 'all' || part === 'shared' || part === focus;
+        element.classList.toggle('teacher-focus-muted', !active);
+        element.classList.toggle('teacher-focus-active', active);
+      });
+    });
+    return parsed.body.innerHTML;
+  }
+  const parsed = new DOMParser().parseFromString(markup, 'image/svg+xml'), svg = parsed.documentElement;
+  svg.querySelectorAll('[data-teacher-part]').forEach(function (element) {
+    const part = element.getAttribute('data-teacher-part'), active = focus === 'all' || part === 'shared' || part === focus;
+    element.classList.toggle('teacher-focus-muted', !active);
+    element.classList.toggle('teacher-focus-active', active);
+  });
+  return new XMLSerializer().serializeToString(svg);
+}
+function diagramSVG(prefix, narrow) {
+  const layout = PELE_CACHE.layouts[prefix] || PELE_CACHE.layouts.read;
+  return teacherFocusPele(layout[narrow ? 'narrow' : 'wide'], diagramPath);
+}
+function diagramExplanation() {
+  return PELE_CACHE.captions[diagramPath] || PELE_CACHE.captions.all;
+}
+/* teacher-pele-course-runtime:end */
+function diagram(prefix){
+ const choices=[["all","看完整路径"],["miss","第一次：未命中"],["hit","第二次：命中"]];
+ return '<figure class="cache-figure" data-cache-figure data-prefix="'+prefix+'"><div class="diagram-heading"><strong>同一个问题，两条返回路径</strong><span>按步骤编号读图</span></div><div class="path-selector" role="group" aria-label="选择要看的查询路径">'+choices.map(function(item){return '<button data-diagram-path="'+item[0]+'" aria-pressed="'+(diagramPath===item[0])+'">'+item[1]+'</button>';}).join("")+'</div>'+teacherMotionControls(prefix)+'<div data-diagram-canvas>'+diagramSVG(prefix,false)+diagramSVG(prefix,true)+'</div><p class="path-explanation" data-path-explanation aria-live="polite">'+diagramExplanation()+'</p><figcaption>这是顺序查询的路径示意。聚焦某条路径只帮助读图，不代表程序正在运行；先假设副本仍然可用。</figcaption></figure>';
+}
+function selectDiagramPath(path){
+ if(!["all","miss","hit"].includes(path))return;
+ diagramPath=path;
+ document.querySelectorAll("[data-cache-figure]").forEach(function(figure){
+  const prefix=figure.dataset.prefix;
+  figure.querySelectorAll("[data-diagram-path]").forEach(function(button){button.setAttribute("aria-pressed",String(button.dataset.diagramPath===path));});
+  figure.querySelector("[data-diagram-canvas]").innerHTML=diagramSVG(prefix,false)+diagramSVG(prefix,true);
+  figure.querySelector("[data-path-explanation]").textContent=diagramExplanation();
+  /* motion-path-sync */ if(typeof teacherSyncMotion==="function")requestAnimationFrame(teacherSyncMotion);
+ });
+}
+function questionMarkup(prefix){
+ const options=[["wrong","直接返回书籍 42 的副本"],["load","先查缓存；没有 17，就取数并保存"],["forever","缓存会自动保证拿到最新的所有书籍"]];
+ return '<section class="qa-component" data-qa><fieldset class="qa-fieldset" aria-describedby="'+prefix+'-qa-hint"><legend>已经查过 42，现在第一次查 17，会走哪条路？</legend>'+options.map(function(option,index){
+  const id=prefix+'-answer-'+option[0];
+  return '<label class="choice" for="'+id+'" data-choice-label><input id="'+id+'" type="radio" name="'+prefix+'-cache-question" value="'+option[0]+'" data-answer="'+option[0]+'"><span><span class="choice-index">'+String.fromCharCode(65+index)+'</span>'+option[1]+'</span></label>';
+ }).join("")+'</fieldset><div class="qa-actions"><button type="button" class="qa-check" data-question-check>核对思路</button><button type="button" class="qa-retry" data-question-reset>重新想一遍</button></div><p class="qa-state" id="'+prefix+'-qa-hint" data-qa-hint aria-live="polite"></p><div class="qa-feedback" data-qa-feedback role="status" aria-live="polite" hidden><strong data-feedback-title></strong><p data-feedback-body></p></div></section>';
+}
+
+function lesson(i,p){
+ let lede="",body="";
+ if(i===0){
+  lede="先别记缓存的定义。我们从你刚刚查过的一本书开始。";
+  body='<p>假设你正在做一个图书页面。有人想看编号为 <code>42</code> 的书，程序找到它，把书名返回给页面。</p><div class="request"><small>第一次</small><div><p>“帮我找一下 42 号书。”</p><p class="sub">程序取回：看见代码</p></div></div><p>过了一会儿，同一个人又问了一遍。书没有变，问题也没有变。如果程序再次执行同样的取数工作，它就重复做了一件刚做过的事。</p><div class="request"><small>第二次</small><div><p>“还是刚才那本 42 号书。”</p><p class="sub">这一次，能不能少做一点工作？</p></div></div><p>一个自然的想法是：<strong>第一次找到以后，先留下一份。下次再问，看看这份还能不能用。</strong></p><div class="thought">缓存的起点，是让后一次请求有机会<br>复用前一次的结果。</div><p>这门小课只追踪这两次查询。你会先看一张路径图，再走进三个完整文件，找到它们在代码里的位置。</p><div class="source-callout"><p>想先看看这两次查询怎样写：</p>'+sourceButton(p,"request","request","查看连续两次 getBook(42)")+'</div><p class="note">本课使用一个可执行的教学示例。书籍数据保存在内存中，用来把调用关系看清楚；这里没有实际测量查询耗时。</p><div class="endline"></div><p class="endnote">接下来：程序怎样判断这次是否需要重新取数？</p>';
+ }else if(i===1){
+  lede="把“找一本书”分成两条路，比先记术语更有帮助。";
+  body='<p>每次请求到来，程序先做一个小判断：<strong>缓存里有没有这个问题对应的副本？</strong></p><p>这次的问题是“42 号书”，示例用 <code>book:42</code> 这个键来标记。键像抽屉上的标签，避免把 17 号书和 42 号书混在一起。</p>'+diagram(p)+'<div class="definition"><strong>未命中</strong><span>缓存里没有所需副本。继续取数，把拿到的结果放进缓存，然后返回。</span></div><div class="definition"><strong>命中</strong><span>缓存里已经有可用副本。直接返回它，跳过这一次取数。</span></div><h2>为什么它有机会变快？</h2><p>在真实系统中，取数可能需要访问数据库或远端服务。缓存的作用不是让这些地方突然查得更快，而是让命中的请求<strong>不必再去一次</strong>。</p><div class="thought">先问“这次省掉了哪一步”，<br>再谈“快了多少”。</div><div class="source-callout"><p>这个判断在源码里有一个清楚的位置：</p>'+sourceButton(p,"cache","cache","对照 getOrLoad 的两条路径")+'</div><p class="note">先只考虑顺序查询，而且留下的副本仍然可用。过期、更新和并发是另外的问题。</p>';
+ }else if(i===2){
+  lede="现在带着图里的两条分支，去源码里走一遍。";
+  body='<p>第一次查询 <code>42</code> 时，缓存还是空的。我们只跟踪这一次请求，不急着理解文件里的每个符号。</p><ol class="walk"><li><div><strong>getBook 组织这次查询。</strong><br>它组成 <code>book:42</code>，把“怎样找到这本书”交给缓存函数。'+sourceButton(p,"catalog","catalog","打开 catalog.js · getBook")+'</div></li><li><div><strong>没有副本，才执行 load。</strong><br>缓存检查失败后，执行传进来的取数动作；拿到结果，保存到缓存，再返回。'+sourceButton(p,"miss","miss","打开 cache.js · 未命中分支")+'</div></li><li><div><strong>实际取数的是 findBook。</strong><br>传入的动作是 <code>() =&gt; findBook(id)</code>。它继续走进 <code>books.js</code>。'+sourceButton(p,"books","books","打开 books.js · findBook")+'</div></li></ol><div class="thought">把取数动作交进去，不等于立刻取数。<br>缓存先判断，只有需要时才执行它。</div><h2>接着，再查询一次 42</h2><p>第一次结束以后，缓存里有了 <code>book:42</code>。第二次进入相同函数，<code>entries.has(key)</code> 得到肯定答案，于是直接返回副本。后面的 <code>load()</code> 不再执行。</p><div class="source-callout"><p>近路在代码里只有两行：</p>'+sourceButton(p,"hit","hit","定位 cache.js · 直接返回的两行")+'</div><p>第二次仍然进入 <code>getBook</code>，仍然生成键，仍然检查缓存。它少做的，是<strong>再次调用 findBook</strong>，以及这次调用承担的取数工作。</p><div class="thought">两次顺序查询，调用两次 getBook，<br>但 findBook 只执行一次。</div><h2>可以暂时追远一点，再回来</h2><p>源码里带下划线的函数名可以点击。试着从 <code>getOrLoad</code> 走进缓存文件，再点击 <code>load</code> 回到它被传入的位置，继续追进 <code>findBook</code>。</p><div class="source-callout"><p>从组织查询的这一行开始：</p>'+sourceButton(p,"callback","callback","追读这一行里的函数调用")+'</div><p class="note">上方的箭头可以沿源码路径返回。结束探索时点“返回阅读”，讲义会保留在这一步的原来位置。</p>';
+ }else{
+  lede="先不看定义。用一条新请求，判断自己是否理解了关系。";
+  body='<p>我们已经查过两次 <code>42</code>，缓存里有 <code>book:42</code>。接下来有人换了个问题。</p><div class="request"><small>新请求</small><div><p>“这次帮我找 17 号书。”</p><p class="sub">问题变了，键也会变成 book:17。</p></div></div>'+questionMarkup(p)+'<p>这份自检只帮助你核对思路，不会锁住下一步，也不会把“读过”自动算作“掌握”。</p><h2>再用自己的话说一遍</h2><p>如果第三次仍然查 42，程序会省掉什么？它又保留了哪些工作？</p><details><summary>看看参考思路</summary><p>仍然进入 getBook、生成 book:42 并检查缓存；命中后直接返回，省掉再次执行 findBook 的工作。不是“什么都不做”，也不是“数据库本身变快了”。</p></details><div class="source-callout"><p>想核对自己的判断：</p>'+sourceButton(p,"check","cache","回到完整分支再看一眼")+'</div><div class="endline"></div><p class="endnote">这章先学到这里：重复的问题遇到可用副本时，缓存让我们有机会少做一次取数。是否真正理解，留给下一次解释和应用来验证。</p>';
+ }
+ return '<div class="eyebrow"><b>'+String(i+1).padStart(2,"0")+' / 04</b><i></i><span>源码小课 · '+STEPS[i].title+'</span></div><h1 id="'+p+'-heading" tabindex="-1">'+STEPS[i].headline+'</h1><p class="lede">'+lede+'</p><div class="prose">'+body+'</div>';
+}
+function render(){
+ $("article").innerHTML=lesson(state.step,"read");
+ $("previous").disabled=state.step===0;
+ $("next").innerHTML=(state.step===3?"标记已读":"下一步")+'<span aria-hidden="true">→</span>';
+ $("count").textContent=String(state.step+1).padStart(2,"0")+" / 04";
+ $("dots").innerHTML=STEPS.map(function(s,i){return '<span class="dot '+(i===state.step?"current":state.read.includes(i)?"read":"")+'"></span>';}).join("");
+ $("progress").style.width=(state.read.length/4*100)+"%";
+ renderOutline();feedback();
+ /* motion-course-sync */ if(typeof teacherSyncMotion==="function")requestAnimationFrame(teacherSyncMotion);
+ requestAnimationFrame(function(){$("reader-scroll").scrollTop=state.scrolls[state.step]||0;});
+}
+function markRead(){if(!state.read.includes(state.step))state.read.push(state.step);}
+function go(index,mark){
+ const wasSource=sourceOpen;
+ if(wasSource)closeSource(false);
+ if(!wasSource)remember();
+ if(mark)markRead();state.step=Math.max(0,Math.min(3,index));render();save();
+ requestAnimationFrame(function(){$("read-heading").focus({preventScroll:true});});
+}
+function renderOutline(){
+ $("outline-list").innerHTML=STEPS.map(function(s,i){return '<li><button class="outline-step" data-step="'+i+'" '+(i===state.step?'aria-current="step"':"")+'><span>'+String(i+1).padStart(2,"0")+'</span><span>'+s.title+'</span><span>'+(state.read.includes(i)?"已读":"")+'</span></button></li>';}).join("");
+ $("read-progress").innerHTML="已读 "+state.read.length+" / 4 个步骤<br>进度保留在当前浏览器；已读不等于掌握。";
+}
+function openSource(anchor,opener){
+ if(!ANCHORS[anchor])return;
+ if(!sourceOpen){
+  remember();save();returnPlace={step:state.step,top:$("reader-scroll").scrollTop,focus:opener?opener.id:null};
+  comparisonTop=returnPlace.top;comparisonReady=false;
+  $("compare-article").innerHTML=lesson(state.step,"compare");$("compare-title").textContent=STEPS[state.step].title;
+  $("source-mode").dataset.tab="source";
+  $("reader").hidden=true;$("source-mode").hidden=false;sourceOpen=true;past=[];future=[];current=null;
+  requestAnimationFrame(function(){if(sourceOpen&&$("explanation").clientHeight){$("explanation").scrollTop=comparisonTop;comparisonReady=true;}});
+ }
+ /* motion-source-sync */ if(typeof teacherSyncMotion==="function")requestAnimationFrame(teacherSyncMotion);
+ homeAnchor=anchor;setTab("source");navigate(Object.assign({},ANCHORS[anchor],{anchor:anchor,top:0}));feedback();$("return-reader").focus({preventScroll:true});
+}
+function closeSource(focus){
+ if(!sourceOpen)return;sourceOpen=false;$("source-mode").hidden=true;$("reader").hidden=false;
+ if(returnPlace){state.step=returnPlace.step;state.scrolls[state.step]=returnPlace.top;requestAnimationFrame(function(){$("reader-scroll").scrollTop=returnPlace.top;if(focus!==false){const opener=returnPlace.focus&&$(returnPlace.focus);(opener||$("read-heading")).focus({preventScroll:true});}});}
+ save();
+}
+function sourceSnapshot(){return current?Object.assign({},current,{top:$("code-scroll").scrollTop,left:$("code-scroll").scrollLeft}):null;}
+function navigate(target,keepHistory,restore){
+ if(!FILES[target.file])return;
+ if(keepHistory!==false&&current){past.push(sourceSnapshot());future=[];}
+ current=Object.assign({},target);renderCode(restore);
+}
+function sourceBack(){if(!past.length)return;future.push(sourceSnapshot());navigate(past.pop(),false,true);}
+function sourceForward(){if(!future.length)return;past.push(sourceSnapshot());navigate(future.pop(),false,true);}
+function plainTokens(text,file,line){
+ const links={getOrLoad:"cache",findBook:"books",getBook:"catalog",demo:"request",load:"callback"};
+ return text.split(/\b(getOrLoad|findBook|getBook|demo|load)\b/g).map(function(part){
+  const name=links[part];if(!name)return esc(part);const a=ANCHORS[name];
+  if(file===a.file&&line===a.start)return esc(part);
+  if(part==="load"&&!(file==="src/cache.js"&&line===8))return esc(part);
+  return '<button class="symbol" data-source-anchor="'+name+'" title="跳转到 '+a.file+':'+a.start+'" aria-label="追读 '+part+' 的'+(part==="load"?"传入位置":"定义")+'">'+esc(part)+'</button>';
+ }).join("");
+}
+function colorLine(text,file,line){
+ const regex=/("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\b(?:import|from|export|async|function|const|let|if|return|await|new|throw|for|of|true|false|null)\b|\b\d+\b)/g;
+ let result="",last=0;
+ for(const m of text.matchAll(regex)){result+=plainTokens(text.slice(last,m.index),file,line);const token=m[0],kind=(token[0]==='"'||token[0]==="'")?"string":/^\d+$/.test(token)?"number":"key";result+='<span class="code-'+kind+'">'+esc(token)+'</span>';last=m.index+token.length;}
+ return result+plainTokens(text.slice(last),file,line);
+}
+function renderCode(restore){
+ const lines=FILES[current.file];
+ $("files").innerHTML=Object.keys(FILES).map(function(file){return '<button class="file-button" data-file="'+file+'" aria-pressed="'+(file===current.file)+'">'+file.split("/").pop()+'</button>';}).join("");
+ $("filename").textContent=current.file;
+ $("source-location").textContent=current.start?current.label+" · L"+current.start+(current.end!==current.start?"–"+current.end:""):"完整文件 · 自主浏览";
+ const origin=ANCHORS[homeAnchor||STEPS[state.step].source],atOrigin=current.file===origin.file&&current.start===origin.start&&current.end===origin.end;
+ $("source-context").textContent=atOrigin?"讲解对应":"正在追读";
+ $("source-context").dataset.exploring=String(!atOrigin);
+ $("source-orientation").hidden=atOrigin;
+ $("source-origin").textContent="本步入口："+origin.file+" · L"+origin.start+(origin.end!==origin.start?"–"+origin.end:"");
+ $("source-copy-status").textContent="";
+ $("line-count").textContent="完整文件 · "+lines.length+" 行";
+ $("code-lines").innerHTML=lines.map(function(text,i){return '<div class="code-line '+(current.start&&i+1>=current.start&&i+1<=current.end?"focused":"")+'" data-line="'+(i+1)+'"><span class="line-number" aria-hidden="true">'+(i+1)+'</span><code>'+colorLine(text,current.file,i+1)+'</code></div>';}).join("");
+ $("source-back").disabled=!past.length;$("source-forward").disabled=!future.length;
+ requestAnimationFrame(function(){
+  if(restore){$("code-scroll").scrollTop=current.top||0;$("code-scroll").scrollLeft=current.left||0;return;}
+  const row=current.start&&$("code-lines").querySelector('[data-line="'+current.start+'"]');
+  $("code-scroll").scrollTop=row?Math.max(0,row.offsetTop-$("code-lines").offsetTop-65):0;
+  $("code-scroll").scrollLeft=0;
+ });
+}
+function toggleSourceWrap(){
+ sourceWrap=!sourceWrap;
+ $("code-scroll").classList.toggle("is-wrapped",sourceWrap);
+ $("source-wrap").setAttribute("aria-pressed",String(sourceWrap));
+ requestAnimationFrame(ensureSourceHighlightVisible);
+}
+async function copySourceFile(){
+ if(!current)return;
+ const file=current.file,text=FILES[file].join("\n")+"\n",button=$("source-copy"),status=$("source-copy-status"),active=document.activeElement;
+ let copied=false;
+ button.disabled=true;button.textContent="正在复制…";status.textContent="";
+ try{
+  if(navigator.clipboard&&window.isSecureContext){try{await navigator.clipboard.writeText(text);copied=true;}catch(error){}}
+  if(!copied){
+   const field=document.createElement("textarea");
+   field.value=text;field.readOnly=true;field.setAttribute("aria-label","复制源码临时区域");
+   field.style.cssText="position:fixed;left:-10000px;top:0;width:1px;height:1px;opacity:0";
+   document.body.appendChild(field);
+   try{field.focus();field.select();field.setSelectionRange(0,text.length);copied=Boolean(document.execCommand("copy"));}
+   finally{field.remove();if(active&&active.isConnected)active.focus({preventScroll:true});}
+  }
+  status.textContent=copied?"已复制 "+file+" 的完整内容":"未能复制；可在源码区手动选择文本。";
+ }catch(error){status.textContent="未能复制；可在源码区手动选择文本。";}
+ finally{button.disabled=false;button.textContent="复制完整文件";}
+}
+function ensureSourceHighlightVisible(){
+ if(!sourceOpen||!current||!current.start)return;
+ const viewport=$("code-scroll"),first=$("code-lines").querySelector('[data-line="'+current.start+'"]'),last=$("code-lines").querySelector('[data-line="'+current.end+'"]');
+ if(!first||!viewport.clientHeight)return;
+ const bounds=viewport.getBoundingClientRect(),begin=first.getBoundingClientRect(),end=(last||first).getBoundingClientRect();
+ if(begin.top<bounds.top+12||end.bottom>bounds.bottom-12)viewport.scrollTop+=begin.top-bounds.top-24;
+}
+function setTab(tab){
+ const pane=$("explanation"),previous=$("source-mode").dataset.tab;
+ if(previous==="explain"&&comparisonReady&&pane.clientHeight)comparisonTop=pane.scrollTop;
+ if(tab==="explain")comparisonReady=false;
+ $("source-mode").dataset.tab=tab;
+ document.querySelectorAll("[data-tab]").forEach(function(b){if(b.tagName==="BUTTON")b.setAttribute("aria-selected",String(b.dataset.tab===tab));});
+ if(tab==="source")requestAnimationFrame(ensureSourceHighlightVisible);
+ else requestAnimationFrame(function(){if(sourceOpen&&$("source-mode").dataset.tab==="explain"&&pane.clientHeight){pane.scrollTop=comparisonTop;comparisonReady=true;}});
+}
+function feedback(){
+ const answer=state.answer,checked=Boolean(answer&&state.checked);
+ const titles={load:"✓ 这条思路对上了",wrong:"再分清这次问的是哪一本书",forever:"这里多假设了一项能力"};
+ const reasons={load:"book:17 是一个新键，42 的副本不能替它回答。先检查 17 的副本；没有时调用 findBook，再为下一次留下副本。",wrong:"42 和 17 是两个问题。缓存按键寻找副本，book:42 不能回答 book:17；这次仍需要取得 17 的数据。",forever:"这个示例只展示按键复用已有结果，没有自动更新或永久保持最新的保证。先判断 book:17 是否存在，再决定是否取数。"};
+ document.querySelectorAll("[data-qa]").forEach(function(component){
+  component.querySelectorAll("input[data-answer]").forEach(function(input){
+   input.checked=input.dataset.answer===answer;
+   const label=input.closest("[data-choice-label]");
+   label.dataset.selected=String(input.checked);
+   label.dataset.evaluated=String(checked&&input.checked);
+   label.dataset.correct=String(input.dataset.answer==="load");
+  });
+  const check=component.querySelector("[data-question-check]"),retry=component.querySelector("[data-question-reset]");
+  check.disabled=!answer||checked;check.textContent=checked?"已核对":"核对思路";retry.disabled=!answer;
+  component.querySelector("[data-qa-hint]").textContent=!answer?"先选一个答案，再核对自己的思路。":checked?"可以换一个选项重新核对，也可以继续阅读。":"已选择 "+({wrong:"A",load:"B",forever:"C"}[answer])+"。准备好后，点“核对思路”。";
+  const result=component.querySelector("[data-qa-feedback]");result.hidden=!checked;
+  component.querySelector("[data-feedback-title]").textContent=checked?titles[answer]:"";
+  component.querySelector("[data-feedback-body]").textContent=checked?reasons[answer]:"";
+ });
+}
+function checkQuestion(){if(!state.answer)return;state.checked=true;feedback();save();}
+function resetQuestion(component){
+ state.answer=null;state.checked=false;feedback();save();
+ const first=component&&component.querySelector('input[data-answer]');if(first)first.focus({preventScroll:true});
+}
+function notice(message){clearTimeout(noticeTimer);$("notice-text").textContent=message;$("notice").hidden=false;noticeTimer=setTimeout(function(){$("notice").hidden=true;},4500);}
+$("reader-scroll").addEventListener("scroll",function(){if(sourceOpen)return;clearTimeout(scrollTimer);scrollTimer=setTimeout(function(){remember();save();},120);},{passive:true});
+$("explanation").addEventListener("scroll",function(){if(sourceOpen&&comparisonReady&&$("explanation").clientHeight)comparisonTop=$("explanation").scrollTop;},{passive:true});
+$("previous").addEventListener("click",function(){go(state.step-1,false);});
+$("next").addEventListener("click",function(){if(state.step<3){go(state.step+1,true);return;}markRead();render();save();notice("本章已标记为已读，理解程度留给自己检验");});
+$("return-reader").addEventListener("click",function(){closeSource();});
+$("source-back").addEventListener("click",sourceBack);$("source-forward").addEventListener("click",sourceForward);
+$("source-wrap").addEventListener("click",toggleSourceWrap);
+$("source-copy").addEventListener("click",copySourceFile);
+$("source-home").addEventListener("click",function(){const name=homeAnchor||STEPS[state.step].source;navigate(Object.assign({},ANCHORS[name],{anchor:name,top:0}));});
+$("outline-open").addEventListener("click",function(){renderOutline();$("reset-confirm").hidden=true;$("outline").showModal();});
+$("outline-close").addEventListener("click",function(){$("outline").close();});
+$("reset-open").addEventListener("click",function(){$("reset-confirm").hidden=false;$("reset-do").focus();});
+$("reset-cancel").addEventListener("click",function(){$("reset-confirm").hidden=true;$("reset-open").focus();});
+$("reset-do").addEventListener("click",function(){if(sourceOpen)closeSource(false);state=fresh();$("outline").close();$("reset-confirm").hidden=true;render();save();notice("从第一步重新开始");});
+$("notice-close").addEventListener("click",function(){$("notice").hidden=true;});
+document.addEventListener("click",function(e){
+ const t=e.target instanceof Element?e.target:null;if(!t)return;
+ const path=t.closest("[data-diagram-path]");if(path){selectDiagramPath(path.dataset.diagramPath);return;}
+ const a=t.closest("[data-anchor]");if(a){openSource(a.dataset.anchor,a);return;}
+ const s=t.closest("[data-source-anchor]");if(s){const name=s.dataset.sourceAnchor;navigate(Object.assign({},ANCHORS[name],{anchor:name,top:0}));return;}
+ const f=t.closest("[data-file]");if(f){navigate({file:f.dataset.file,start:null,end:null,label:"",top:0});return;}
+ const step=t.closest("[data-step]");if(step){$("outline").close();go(Number(step.dataset.step),false);return;}
+ const tab=t.closest("button[data-tab]");if(tab){setTab(tab.dataset.tab);return;}
+ const check=t.closest("[data-question-check]");if(check){checkQuestion();return;}
+ const retry=t.closest("[data-question-reset]");if(retry){resetQuestion(retry.closest("[data-qa]"));return;}
+});
+document.addEventListener("change",function(e){
+ const input=e.target;
+ if(input instanceof HTMLInputElement&&input.matches('input[type="radio"][data-answer]')){state.answer=input.dataset.answer;state.checked=false;feedback();save();}
+});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!$("outline").open&&sourceOpen){e.preventDefault();closeSource();}});
+window.addEventListener("pagehide",function(){remember();save();});
+window.addEventListener("resize",function(){if(sourceOpen)requestAnimationFrame(ensureSourceHighlightVisible);});
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden"){remember();save();}});
+$("warning").hidden=storageOK;render();if(resume)notice("已接着上次的位置继续");
+</script>
+</body></html>
