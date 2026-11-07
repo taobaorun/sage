@@ -1,0 +1,236 @@
+{
+  "version": 1,
+  "id": "cache-walkthrough",
+  "title": "跟着两次请求理解缓存",
+  "language": "zh-CN",
+  "sections": [
+    {
+      "id": "first-request",
+      "title": "第一次请求，为什么要读取并保存",
+      "kicker": "一个可运行的教学示例",
+      "goal": "能跟着商品42说明缓存未命中时的工作。",
+      "body": "<p>先看商品42的第一次读取。Map里没有42，于是调用load得到原始结果，保存它，再返回。</p><div data-teacher-diagram=\"cache-flow\"></div><p>沿miss分支读：读取和保存都是本次必须做的工作。把第二次请求放进来，哪一步可以省下？</p><button type=\"button\" class=\"source-link\" data-source=\"cache.mjs\" data-start=\"2\" data-end=\"7\">对照完整读取函数</button><p>这里暂不讨论过期、并发与容量；它们是后续的学习问题。</p>",
+      "source": {
+        "file": "run.mjs",
+        "start": 1,
+        "end": 3
+      },
+      "quiz": [
+        {
+          "id": "miss",
+          "prompt": "首次读取时，load为什么被调用？",
+          "options": [
+            {
+              "id": "empty",
+              "text": "Map中还没有这个id的结果"
+            },
+            {
+              "id": "always",
+              "text": "每次get都会重新调用load"
+            }
+          ],
+          "answer": "empty",
+          "explanation": "只有has判断不成立时，才继续到await load；命中会提前return。"
+        }
+      ]
+    },
+    {
+      "id": "repeat-request",
+      "title": "第二次请求，哪条路径被跳过",
+      "goal": "能说明同一个id的重复请求怎样省下工作。",
+      "body": "<p>第一轮已经保存商品42。第二次进入get，has为真，直接返回Map里的结果，load和set都跳过。</p><p>下方状态模型是作者给定的教学示意，没有进行TLC检查。逐步比较loads的值；它表示示例中原始读取的次数，并非实测耗时。</p>",
+      "source": {
+        "file": "cache.mjs",
+        "start": 2,
+        "end": 6
+      },
+      "graph": "cache-path",
+      "quiz": [
+        {
+          "id": "hit",
+          "prompt": "示例第二次get(42)后，原始读取总共发生几次？",
+          "options": [
+            {
+              "id": "once",
+              "text": "1次"
+            },
+            {
+              "id": "twice",
+              "text": "2次"
+            }
+          ],
+          "answer": "once",
+          "explanation": "第二次命中缓存，提前返回，因此load只在第一次被调用。"
+        }
+      ],
+      "exercise": {
+        "prompt": "如果第二次改成get(43)，预测会执行哪些步骤。给出代码中的判断依据。",
+        "hints": [
+          "Map按id保存；先看has的结果。"
+        ],
+        "reference": "43还未被保存，会再次执行load、set和return。缓存命中依赖查询键，不能只根据“第二次请求”判断。"
+      }
+    }
+  ],
+  "sources": {
+    "cache.mjs": {
+      "language": "javascript",
+      "text": "const values = new Map();\nexport async function get(id, load) {\n  if (values.has(id)) return values.get(id);\n  const value = await load(id);\n  values.set(id, value);\n  return value;\n}\n",
+      "origin": {
+        "label": "完整、可运行的教学示例",
+        "path": "cache.mjs"
+      },
+      "symbols": [
+        {
+          "id": "get",
+          "label": "get · 缓存读取",
+          "start": 2,
+          "end": 7
+        }
+      ]
+    },
+    "run.mjs": {
+      "language": "javascript",
+      "text": "import { get } from './cache.mjs';\nconst first = await get(42, async id => ({ id }));\nconst second = await get(42, async id => ({ id }));\n",
+      "origin": {
+        "label": "完整教学调用方",
+        "path": "run.mjs"
+      },
+      "links": [
+        {
+          "line": 1,
+          "token": "get",
+          "target": {
+            "file": "cache.mjs",
+            "start": 2,
+            "end": 7
+          }
+        },
+        {
+          "line": 2,
+          "token": "get",
+          "target": {
+            "file": "cache.mjs",
+            "start": 2,
+            "end": 7
+          }
+        },
+        {
+          "line": 3,
+          "token": "get",
+          "target": {
+            "file": "cache.mjs",
+            "start": 2,
+            "end": 7
+          }
+        }
+      ]
+    }
+  },
+  "diagrams": {
+    "cache-flow": {
+      "source": "flowchart LR\n accTitle: 商品42的一次缓存读取\n accDescr: 命中直接返回，未命中读取并保存后返回。\n query[查询商品42] --> check{已有结果?}\n check -->|hit| hit[直接返回]\n check -->|miss| load[读取原始数据]\n load --> save[保存并返回]",
+      "narrowSource": "flowchart TB\n accTitle: 商品42的一次缓存读取\n accDescr: 命中直接返回，未命中读取并保存后返回。\n query[查询42] --> check{已有结果?}\n check -->|hit| hit[直接返回]\n check -->|miss| load[读取原始数据]\n load --> save[保存并返回]",
+      "readingCue": "先看判断，再沿命中或未命中的箭头读。",
+      "caption": "两条路径返回同一查询的结果；这里省略过期和并发问题。"
+    }
+  },
+  "graphs": {
+    "cache-path": {
+      "title": "同一个id的两次读取",
+      "basis": "illustrative",
+      "initialState": "empty",
+      "note": "教学示意，仅描述顺序执行；尚未做TLC检查。",
+      "states": [
+        {
+          "id": "empty",
+          "label": "首次查询前",
+          "variables": {
+            "cached": false,
+            "loads": 0
+          }
+        },
+        {
+          "id": "loaded",
+          "label": "原始读取完成",
+          "variables": {
+            "cached": false,
+            "loads": 1
+          }
+        },
+        {
+          "id": "ready",
+          "label": "保存并返回",
+          "variables": {
+            "cached": true,
+            "loads": 1
+          }
+        },
+        {
+          "id": "hit",
+          "label": "第二次命中并返回",
+          "variables": {
+            "cached": true,
+            "loads": 1
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "load",
+          "from": "empty",
+          "to": "loaded",
+          "action": "load",
+          "label": "未命中，读取原始数据",
+          "source": {
+            "file": "cache.mjs",
+            "start": 4,
+            "end": 4
+          }
+        },
+        {
+          "id": "save",
+          "from": "loaded",
+          "to": "ready",
+          "action": "save",
+          "label": "保存并返回",
+          "source": {
+            "file": "cache.mjs",
+            "start": 5,
+            "end": 6
+          }
+        },
+        {
+          "id": "hit",
+          "from": "ready",
+          "to": "hit",
+          "action": "hit",
+          "label": "同一个id再次读取，命中返回",
+          "source": {
+            "file": "cache.mjs",
+            "start": 3,
+            "end": 3
+          }
+        }
+      ],
+      "traces": [
+        {
+          "id": "two-reads",
+          "title": "两次读取的教学路径",
+          "type": "example",
+          "states": [
+            "empty",
+            "loaded",
+            "ready",
+            "hit"
+          ],
+          "edges": [
+            "load",
+            "save",
+            "hit"
+          ]
+        }
+      ]
+    }
+  }
+}

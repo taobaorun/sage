@@ -13,19 +13,25 @@ LEARNING.md                           # Cross-agent entry point
 ├── <topic-slug>/                     # One directory per topic (kebab-case)
 │   ├── meta.md                       # Materials, starting level, session log
 │   ├── learning-checklist.md         # Progress checklist (deleted when topic completes)
+│   ├── course.json                   # Durable content/evidence for the bundled reader
 │   └── discussion-notes.md           # TA-captured discussion insights
 
 learning-notes/                       # Human-facing deliverables (visible)
 ├── <topic-slug>/                     # One directory per topic
-│   ├── index.html                    # Table of contents + overview
-│   ├── 01-<section>.html             # Chapter HTML artifacts
-│   ├── 02-<section>.html
-│   ├── ...
-│   └── XX-extended-<topic>.html      # Extended exploration (if any)
+│   ├── index.html                    # Default: one offline reader, #section-id links
+│   ├── materials/                    # Reproducible models/configs/logs when applicable
+│   └── assets/                       # Retained illustration source assets when useful
 ```
 
-HTML artifacts (generated via `/html-artifact` skill) replace the old markdown
-chapter files. They are self-contained, navigable, and professional.
+Use the bundled builder described in [Reader Authoring](reader-authoring.md).
+Keep stable course/section/quiz IDs when updating `course.json`, then rebuild `index.html`.
+Existing numbered HTML chapters remain valid; do not rewrite historical artifacts or
+delete source material as part of starting another topic.
+
+Browser read/answer counters are independent of the checklist. Creating a course or
+checking a preset answer does not mark a goal mastered. Record learner explanations,
+source walkthroughs and transfer evidence in the session log/checklist before checking
+off goals. Update `meta.md` to distinguish material prepared from learning demonstrated.
 
 TA discussion notes (`.learning/<topic-slug>/discussion-notes.md`) capture
 insights from deep discussions — not lecture content, but what emerged when

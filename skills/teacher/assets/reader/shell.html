@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="{{LANGUAGE}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>{{TITLE}} · Teacher</title>
+  <style>{{STYLE}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="mark" aria-hidden="true">t.</span><span>teacher</span><span class="title">{{TITLE}}</span></div>
+    <div class="top-actions"><button class="plain" id="settings-open" aria-haspopup="dialog">阅读设置</button><button class="plain" id="outline-open" aria-haspopup="dialog">课程目录</button></div>
+    <div class="progress-hairline" id="progress"></div>
+  </header>
+  <div class="storage-warning" id="storage-warning" role="status" hidden>当前浏览器未允许保存，关闭后可能无法继续上次的位置。</div>
+  <main class="reader" id="reader">
+    <div class="reading-scroll" id="reading-scroll" aria-label="当前章节" tabindex="-1"><article class="reading-article" id="reading-article"></article></div>
+    <footer class="footer" aria-label="课程导航"><button class="plain" id="previous">← 上一节</button><span class="step-count" id="step-count"></span><button class="next" id="next">下一节 →</button></footer>
+  </main>
+  <section class="source-mode" id="source-mode" data-tab="code" aria-label="源码对照" hidden>
+    <div class="source-toolbar"><button class="plain" id="source-close">← 返回阅读</button><span class="context" id="source-context"></span><span class="context">固定快照 · 完整文件</span></div>
+    <div class="source-tabs" role="tablist" aria-label="源码对照视图">
+      <button id="explanation-tab" role="tab" aria-controls="source-explanation" data-source-tab="explanation" aria-selected="false">当前讲解</button>
+      <button id="code-tab" role="tab" aria-controls="source-panel" data-source-tab="code" aria-selected="true">源码 / 资料</button>
+    </div>
+    <div class="comparison">
+      <section class="source-explanation" id="source-explanation" aria-label="当前讲解"><article class="compare-article" id="compare-article"></article></section>
+      <section class="source-panel" id="source-panel" aria-label="完整文件">
+        <div class="file-toolbar"><button class="plain" id="source-back" aria-label="上个源码位置">←</button><button class="plain" id="source-forward" aria-label="下个源码位置">→</button><select id="source-select" aria-label="选择完整文件"></select></div>
+        <div class="file-heading"><div class="file-meta"><p class="path" id="source-name"></p><p class="range" id="source-range"></p></div><button class="source-home" id="source-home">回到本节源码</button></div>
+        <div class="source-metadata"><select id="source-symbol" aria-label="跳到定义" hidden></select><details><summary>来源与版本</summary><p id="source-origin"></p></details></div>
+        <div class="code-tools"><button id="source-wrap" aria-pressed="false">自动换行</button><button id="source-copy">复制完整文件</button><span class="copy-status" id="source-copy-status" role="status"></span></div>
+        <div class="code-scroll" id="code-scroll" tabindex="0" aria-label="文件内容"><div class="code-lines" id="code-lines"></div></div>
+        <div class="source-foot"><span id="source-lines"></span><span>浏览代码不会切换讲解章节</span></div>
+      </section>
+    </div>
+  </section>
+  <dialog class="outline" id="outline" aria-labelledby="outline-title">
+    <div class="dialog-top"><h2 id="outline-title">课程目录</h2><button class="plain" id="outline-close" aria-label="关闭课程目录">×</button></div>
+    <h3 class="outline-course">{{TITLE}}</h3><ol class="outline-list" id="outline-list"></ol>
+    <div class="outline-foot"><p id="outline-progress"></p><button class="plain" id="reset-open">重新开始这门课程</button><div class="reset-confirm" id="reset-confirm" hidden><p>只清除本课程在当前浏览器的阅读记录、练习选择与草稿。</p><div class="actions"><button class="button" id="reset-confirm-button">确认重新开始</button><button class="plain" id="reset-cancel">取消</button></div></div></div>
+  </dialog>
+  <dialog class="settings" id="settings" aria-labelledby="settings-title">
+    <div class="dialog-top"><h2 id="settings-title">阅读设置</h2><button class="plain" id="settings-close" aria-label="关闭阅读设置">×</button></div>
+    <p class="dialog-note">纸面变化不会清除阅读位置或练习选择。</p>
+    <fieldset><legend>纸面主题</legend>{{THEME_CHOICES}}</fieldset><p class="dialog-note" id="settings-status" role="status">外观独立于课程进度保存。</p>
+  </dialog>
+  <div class="notice" id="notice" role="status" hidden></div>
+  <noscript><p>请启用浏览器 JavaScript 以阅读这份离线课程；无需联网或安装 Node、Java。</p></noscript>
+  <script id="course-data" type="application/json">{{COURSE}}</script>
+  <script id="theme-data" type="application/json">{{THEMES}}</script>
+  <script>{{RUNTIME}}</script>
+</body>
+</html>

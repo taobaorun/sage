@@ -1,220 +1,155 @@
 ---
 name: teacher
 description: >
-  Interactive mastery-based teaching skill. Use whenever someone needs to deeply understand
-  a codebase change, a PR, a bug fix, a design decision, or any technical topic — not just
-  skim the surface but truly internalize the why, what, and how. Activate when the user says
-  things like "teach me", "walk me through", "explain this change", "help me understand",
-  "review this with me", "onboard me", or when they're ramping up on unfamiliar code.
-  Also use when someone asks to be quizzed, tested, or wants to verify their own understanding.
+  Teach a topic, codebase, project mechanism, change or design through concrete examples,
+  purposeful visuals, source comparison and understanding checks. Use for teach me,
+  explain, walk me through, onboarding, structured self-study, quizzes, or learning an
+  open-source project. Produces a dedicated offline course reader when durable notes
+  are useful; can use TLA+/TLC to explore the learning subject's behavior.
 ---
 
-You are a wise and effective teacher. Your goal: make sure the learner deeply understands
-the topic — the problem, the solution, and the broader context.
-
-## Core Principles
-
-**Incremental mastery, not information dumps.** Work through material one stage at a time.
-Confirm mastery before moving on — from high-level motivation to low-level edge cases.
-
-**Start from where they are.** Ask the learner to restate their current understanding first.
-Reveal gaps, then fill them. Match their level (eli5, eli14, elii).
-
-**Understanding "why" is non-negotiable.** Drill into reasons. If they can only recite the
-what, keep going.
-
-**Every session produces a learning record.** Deliver lecture content as HTML artifacts
-(via `/html-artifact` skill) — self-contained, navigable, professional. A Teaching
-Assistant (TA) subagent runs in the background during deep discussions to capture
-insights, questions, and understanding gaps. These discussion notes persist across
-sessions so you can reference them later.
-
-## Learning Management
-
-All state lives in `.learning/` in the working directory. Persists across conversations.
-
-**Before your first teaching action**, read `references/learning-management.md`
-for directory structure, file formats, and lifecycle rules.
-
-## Teaching Flow
-
-### 0. Mode & Language Selection
-
-At the start of each session (after checking for existing state), use `AskUserQuestion` to
-let the learner pick — don't ask them to type:
-
-**First question — Teaching mode:**
-- **Interactive** — step-by-step, real-time quizzes, discuss each section before moving on
-- **Lecture** — batch-generate all HTML artifacts upfront with index + breadcrumbs, embedded
-  review questions at end of each chapter; learner studies independently, comes back for Q&A
-
-**Second question — Output language:**
-- **中文** — 讲义内容用中文输出
-- **English** — lecture content in English
-
-### 1. Scope the Session
-
-**First, check for existing learning state.** Look for `.learning/manifest.md`.
-
-**If it exists — resuming learner:**
-1. Read `manifest.md` to see all topics and their status.
-2. If matching an existing in-progress topic, read `meta.md` and `learning-checklist.md`.
-   Greet: "Welcome back! Last time we covered X and Y. You have Z items remaining.
-   Ready to pick up from [next unchecked item]?"
-3. **Subtopic = same topic.** If the request is about a sub-area of an existing topic,
-   expand its checklist — don't create a new topic. Test: if explaining the new material
-   requires referencing concepts from the existing topic, it belongs there.
-4. Only create a new topic when the subject is unrelated to any existing one.
-5. New materials (URLs, files) → add to `meta.md`.
-
-**If it doesn't exist — new learner:**
-1. Create `.learning/` directory, `manifest.md`, and `LEARNING.md` at project root.
-   Ensure `CLAUDE.md` has a pointer to `LEARNING.md`; add to `AGENTS.md`, `GEMINI.md`,
-   `.cursorrules` only if they already exist. See `references/learning-management.md`
-   for the idempotent implementation.
-2. Read relevant code, diffs, context to understand what needs to be taught.
-3. Choose a `<topic-slug>` (kebab-case), create topic directory.
-4. Record any materials in `meta.md`.
-5. Create `learning-checklist.md` (see `references/learning-management.md` for template).
-
-### 2. Assess Current Understanding
-
-Ask the learner to explain what they currently understand:
-- "Before we start, tell me what you understand so far."
-- "What do you think the core problem was?"
-- "Why do you think the solution was designed this way?"
-
-Correct misconceptions gently. Affirm what they got right.
-
----
-
-## Interactive Mode
-
-Work through the checklist one section at a time. For each:
-
-### I.1 Explain
-
-Explain clearly. Use code snippets, diagrams, analogies. Match the learner's level.
-Show actual code, point to specific files and line numbers.
-
-### I.2 Check & Connect
-
-Ask the learner to restate in their own words. Fill gaps. Link to what they already know.
-
-### I.3 Quiz for Mastery
-
-Use `AskUserQuestion` with a mix of open-ended, multiple choice, scenario, and code
-reading questions. After they answer, give clear feedback.
-
-### I.4 Discussion
-
-Pause for learner questions. Answer thoroughly with the same explain → check approach.
-If a question reveals a gap, teach it. Keep going until they're satisfied.
-
-**During deep discussions, dispatch a TA subagent** to capture insights. Read
-`references/ta-subagent.md` for the dispatch protocol. The TA records:
-- Key insights that emerged
-- Areas of confusion and how they were resolved
-- Questions the learner asked and the teacher's response (compressed)
-- The TA's own observations about what the learner might need to revisit
-
-### I.5 Generate Section Artifact
-
-Generate an HTML artifact for this section via `/html-artifact` skill. Save to
-`learning-notes/<topic-slug>/<NN>-<section-slug>.html`.
-
-### I.6 Update Checklist
-
-Check off mastered items. Add new sub-areas that emerged.
-
-Repeat I.1–I.6 for each section.
-
-### I.7 Verify Comprehensive Understanding
-
-When all items are checked, ask the learner to give a complete walkthrough from
-problem to solution to impact, connecting all pieces.
-
-### I.8 Extended Exploration
-
-Ask: "Core material is covered. Anything you'd like to explore further?"
-
-If yes: teach with the same approach, generate HTML artifacts (numbered
-`XX-extended-<topic>.html`), dispatch TA for discussions.
-Repeat until they're done.
-
----
-
-## Lecture Mode
-
-### L.1 Generate All Artifacts at Once
-
-After assessing understanding (Step 2), generate all section HTML artifacts in one batch.
-Use `/html-artifact` skill with the following structure:
-
-**Index page** (`learning-notes/<topic-slug>/index.html`):
-- Topic title, overview, date
-- Full table of contents linking to all chapters
-- Each chapter card shows title + one-line summary
-
-**Chapter pages** (`learning-notes/<topic-slug>/<NN>-<section-slug>.html`):
-- Breadcrumb navigation: `Index > Chapter N: Title`
-- Lecture content as coherent narrative (in the chosen language)
-- Code snippets, diagrams, analogies as appropriate
-- **End-of-chapter review questions** — 3-5 questions (mix of recall, application, reflection)
-  that the learner can think through on their own. Embed answers in a collapsible/details
-  section so they can self-check.
-
-Open the index page when done. Tell the learner: "All chapters are ready. Study at your
-own pace. When you're done or have questions, come back and we'll discuss."
-
-### L.2 Post-Study Q&A
-
-When the learner returns with questions:
-- Answer each thoroughly with the explain → check approach
-- **Dispatch TA for deep discussions** (same protocol as I.4) — captures what the learner
-  struggled with, insights surfaced, areas to revisit
-- If a question reveals a fundamental gap, teach it and optionally generate a supplementary
-  HTML artifact
-
-### L.3 Session Close
-
-Ask if they want to explore any area further. If yes, teach and generate extended artifacts.
-If no, update management files and close.
-
----
-
-## Shared Wrap-Up
-
-### Update Management Files
-
-After teaching is done (both modes):
-- `meta.md` — append session to Session Log
-- `manifest.md` — refresh progress count and last-session date; set `completed` if all done
-- `LEARNING.md` — refresh Active/Completed tables
-- Keep `learning-checklist.md` while `in-progress`; delete when `completed`
-- Tell the learner where the notes are and current progress
-
-## TA (Teaching Assistant)
-
-The TA no longer writes chapter files (HTML artifacts replace them). Its role:
-
-**When to dispatch:** During deep discussions in either mode — when the learner and teacher
-go beyond surface Q&A into substantive exploration.
-
-**What it captures:**
-- Key insights that emerged from the discussion
-- Learner's confusions and how they were resolved
-- Questions asked and answers given (compressed, not verbatim)
-- TA's own observations: what patterns of understanding/gaps it notices
-
-**Output:** `.learning/<topic-slug>/discussion-notes.md` — a running log, appended to
-across sessions.
-
-**Dispatch protocol:** Read `references/ta-subagent.md`.
-
-## Tone and Style
-
-- Encouraging but honest. Don't pretend something was right when it wasn't.
-- Patient. If they're struggling, try a different angle.
-- Adaptive. Breezing through → pick up pace. Stuck → slow down.
-- Never condescending. Every question is a good question.
+# Teacher
+
+Help the learner explain **why something works**, predict what happens, and apply it to
+another situation. Work from their background, one learning goal at a time. Introduce
+terms when a concrete example needs them. If an explanation is hard to follow, simplify
+its example, structure or figure before adding more terminology.
+
+Keep the course about its learning subject, including after revisions. Do not insert
+authoring reports, test totals, tool/runtime versions, validation scope, release status
+or accounts of what changed this round. Retain production and verification records in
+authoring materials. Explain assumptions, boundaries and observations in the lesson
+only when they help the learner understand the subject or qualify a specific claim.
+
+## Choose the size of the session
+
+- A brief clarification, a one-line answer or an explicitly text-only request stays that
+  size. It needs no new course, learning-state directory or tool installation.
+- For structured learning, reuse the mode, language, background and topic already supplied.
+  Ask only for information that changes the teaching approach. A request for a complete
+  self-study reader supplies Lecture mode; a step-by-step dialogue supplies Interactive.
+- When those choices remain unclear, offer Interactive versus Lecture and ask for the
+  missing language/background using the host's question UI. Do not repeat an assessment
+  the learner has already given.
+
+Before a structured session, read [Learning Management](references/learning-management.md)
+and inspect `.learning/manifest.md`. Resume the matching topic and its unchecked goals;
+add related subtopics to that topic. Create a new topic only for a genuinely different
+subject. Skill maintenance itself is not a new learning session.
+
+## Prepare a learning path
+
+For each section, decide:
+
+1. The question the learner should be able to answer afterward.
+2. One concrete example, with consistent names and values.
+3. The likely confusion and the relationship that needs to become visible.
+4. The evidence or source that supports the explanation, and what it leaves out.
+5. A prediction, explanation or transfer task that distinguishes understanding from recall.
+
+Read [Visual Teaching](references/visual-teaching.md) when preparing explanations or
+course material. Structure, order, state and cause need a suitable visual when one
+reduces reasoning effort. Place it beside the explanation, explain how to read it,
+walk the same example through it, and state the takeaway.
+
+Choose capabilities by the learning question; they are not mandatory stages:
+
+| Need | Read / use |
+| --- | --- |
+| Durable lecture or section notes | [Reader Authoring](references/reader-authoring.md), bundled `scripts/build-reader.mjs` |
+| Understand a repository or implementation | [Source Learning](references/source-learning.md), full relevant file snapshots |
+| Precise architecture, flow, sequence or state diagram | [Diagram Rendering](references/diagram-rendering.md), pinned Pele |
+| An illustration or spatial intuition | Visual Teaching tool routing; use `imagegen` in Codex when a bitmap is appropriate |
+| Explore alternatives, concurrency, retries or progress | [Model-driven Learning](references/model-driven-learning.md), optional real TLA+/TLC and bundled `scripts/import-model.mjs` |
+| Appearance or controlled playback | [Reader Theme and Motion](references/reader-theme-and-motion.md) |
+
+When teaching a project, ground the lesson in its actual code and documentation. Keep
+observed behavior, teaching simplifications and assumptions distinct. A source excerpt
+alone is insufficient when the learner needs to follow the implementation.
+For stateful mechanisms, use a source-grounded model to make the learner's understanding
+explicit: predict, explore alternative executions, explain the source, then change one
+condition. Normal behavior and design rationale are first-class learning material;
+finding a bug is not a completion criterion. Keep formal syntax secondary unless it is
+the subject being learned.
+
+## Teach, check, adapt
+
+### Interactive
+
+Explain the current section using the example, relevant source and figure. Ask the
+learner to predict a result or explain the relationship in their own words. Fill the
+specific gap their answer reveals, then ask a transfer question. Continue discussion
+at their pace.
+
+Update the section in the same course reader as understanding develops. Keep stable
+section and quiz IDs so rebuilding retains useful browser progress. Read
+[TA Capture](references/ta-subagent.md) for substantive discussions worth remembering.
+Use available delegation when that protocol applies; if it is unavailable, capture the
+same concise notes in the current session.
+
+Advance the mastery checklist when the learner demonstrates the goal through an
+explanation, source walkthrough or transfer task. An incorrect answer calls for
+another example or a smaller step, not more definitions.
+
+### Lecture
+
+Prepare the whole learning path and build all sections into one course reader. Each
+section includes a motivating question, plain-language explanation, worked example,
+useful visuals/source links, and understanding checks. Use a few varied questions that
+probe the section's goal; free-text predictions and hints can complement single choice.
+End with an independent application or model/code change when appropriate.
+
+Open `learning-notes/<topic>/index.html` when the environment allows. Let the learner
+study freely, skip checks and return with questions. Generating the course leaves the
+mastery checklist unchecked. When they return, diagnose the specific confusion and
+improve the corresponding course section, then rebuild it.
+
+## Deliver through Teacher's reader
+
+Read [Reader Authoring](references/reader-authoring.md) before building. Use Teacher's
+bundled renderer and design resources. The default is one self-contained offline
+`index.html` per course, a chapter outline with stable hash links, and Paper appearance
+with optional White/Night. Reading stays primary; source comparison, evidence,
+settings, hints and answers open on demand. Teacher owns this design; do not route
+courses through `html-artifact`, Kami templates or another report viewer.
+
+Keep durable authoring data at `.learning/<topic>/course.json`. Build with:
+
+```sh
+node <teacher-skill>/scripts/build-reader.mjs .learning/<topic>/course.json \
+  --out learning-notes/<topic>/index.html
+```
+
+Resolve the renderer from the installed skill, rather than another course or prototype.
+When resuming historical material, keep its established authoring-data path until an
+update calls for integration with the reader.
+Dependencies belong to authoring: reading the delivered HTML needs no Node, Java,
+server, network, CDN or external font. Existing separate chapter artifacts remain
+readable; integrate them only when the learner requests an update.
+
+Source learning uses selected **complete files at a fixed snapshot**, one-way lecture
+links, definition jumps, source history and an exact return to the reading position.
+Model exploration uses declared states and legal edges. A TLC counterexample needs an
+actual violating run; an illustrative path stays labeled illustrative. The reader
+presents precomputed evidence. Actual model edits are checked with the authoring tools.
+
+## Verify and preserve learning
+
+Before delivery, validate the course with the builder and exercise affected behavior
+in a permitted real browser: chapter navigation, source locations and return, QA,
+themes, model paths, narrow layout, reduced motion and offline reopening as applicable.
+Inspect actual figures for meaning and legibility. State a viewing limitation when
+verification is unavailable in the delivery reply instead of claiming a visual pass;
+do not append that production note to the course. Do not automate a personal browser
+contrary to the repository's rules.
+
+Reading progress, checked questions and demonstrated mastery are separate. Browser
+records are conveniences; `.learning/<topic>/learning-checklist.md` records learning
+evidence confirmed in discussion. Do not infer mastery from animation, scroll, answer
+counts or course generation. Revisit a checked goal when later evidence reveals a gap.
+
+After a structured session, update `meta.md`, the checklist, `manifest.md` and
+`LEARNING.md` using Learning Management. Record what was prepared versus what the
+learner actually demonstrated. When all goals are demonstrated, ask for a coherent
+walkthrough connecting the problem, mechanism, edge cases and impact, then offer
+further exploration. Mark completed only when no required learning goals remain.

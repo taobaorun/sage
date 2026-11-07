@@ -12,7 +12,7 @@ the discussion yields something worth remembering for future sessions.
 
 ## How to Dispatch
 
-Use `Agent` with `run_in_background: true`. Pass:
+Use the host's available background/subagent mechanism. Pass:
 
 - The discussion topic and context (which section/checklist item triggered it)
 - The learner's questions (compressed)
@@ -20,6 +20,9 @@ Use `Agent` with `run_in_background: true`. Pass:
 - How confusions were resolved
 - Any analogies, code snippets, or examples that emerged
 - The topic slug
+
+If delegation is unavailable, capture the same concise discussion notes in the current
+session. A brief clarification or skill-maintenance task does not call for a TA.
 
 ## Output
 

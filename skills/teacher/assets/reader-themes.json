@@ -1,0 +1,83 @@
+{
+  "default": "paper",
+  "reference": "Kami design principles: warm paper, ink-blue accent, warm neutrals, serif reading typography; night is a Teacher adaptation.",
+  "fonts": {
+    "reading": "TsangerJinKai02, Source Han Serif SC, Noto Serif CJK SC, Noto Serif SC, Songti SC, STSong, SimSun, Georgia, serif",
+    "ui": "PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, system-ui, sans-serif",
+    "mono": "JetBrains Mono, SF Mono, Menlo, Consolas, PingFang SC, monospace"
+  },
+  "themes": {
+    "paper": {
+      "name": "纸本",
+      "description": "暖纸与墨蓝，参考 Kami 的长文阅读风格。",
+      "scheme": "light",
+      "tokens": {
+        "canvas": "#f5f4ed",
+        "surface": "#faf9f5",
+        "surfaceAlt": "#eeece3",
+        "ink": "#141413",
+        "muted": "#5b5953",
+        "line": "#d9d5c8",
+        "accent": "#1b365d",
+        "accentSoft": "#e4ecf5",
+        "figureLine": "#68655b",
+        "figureBorder": "#8b877a",
+        "codeKeyword": "#1b365d",
+        "codeString": "#535843",
+        "codeNumber": "#6e5140",
+        "good": "#315b45",
+        "goodSoft": "#e9f0e6",
+        "bad": "#8a3b42",
+        "badSoft": "#f6eaea"
+      }
+    },
+    "white": {
+      "name": "白纸",
+      "description": "更明净的纸面，保留墨蓝和暖灰层级。",
+      "scheme": "light",
+      "tokens": {
+        "canvas": "#ffffff",
+        "surface": "#fafaf7",
+        "surfaceAlt": "#f0efe9",
+        "ink": "#181816",
+        "muted": "#5c5b55",
+        "line": "#dedbd2",
+        "accent": "#243f63",
+        "accentSoft": "#e8eef6",
+        "figureLine": "#68665e",
+        "figureBorder": "#89867c",
+        "codeKeyword": "#243f63",
+        "codeString": "#505943",
+        "codeNumber": "#6e5140",
+        "good": "#315b45",
+        "goodSoft": "#edf3e9",
+        "bad": "#8a3b42",
+        "badSoft": "#f9eded"
+      }
+    },
+    "night": {
+      "name": "夜读",
+      "description": "Teacher 的暖炭夜读适配，减轻亮屏感并保留对比度。",
+      "scheme": "dark",
+      "tokens": {
+        "canvas": "#1c1c1a",
+        "surface": "#242420",
+        "surfaceAlt": "#30302a",
+        "ink": "#ece8df",
+        "muted": "#bab5aa",
+        "line": "#49483f",
+        "accent": "#a8c5e5",
+        "accentSoft": "#293545",
+        "figureLine": "#b2ada1",
+        "figureBorder": "#939082",
+        "codeKeyword": "#b5cdec",
+        "codeString": "#c2ccac",
+        "codeNumber": "#d8bfa6",
+        "good": "#b6d0b0",
+        "goodSoft": "#29362a",
+        "bad": "#e2b0b4",
+        "badSoft": "#3c292d"
+      }
+    }
+  }
+}
